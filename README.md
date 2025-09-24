@@ -8,7 +8,7 @@ Functions:
 - Delete User
 - Login
 
-- View All Medias
+- View All Media
 - Add Media as User
 - View All Ratings by User
 - Create Rating
