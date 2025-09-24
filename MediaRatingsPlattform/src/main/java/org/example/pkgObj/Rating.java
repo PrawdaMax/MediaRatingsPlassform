@@ -4,10 +4,14 @@ public class Rating {
     int value;
     String comment;
     String timestamp;
+    private String Username;
+    private String Medianame;
 
-    public Rating(int value, String comment, String timestamp) {
+    public Rating(int value, String comment, String timestamp, String Username, String Medianame) {
         this.value = value;
         this.comment = comment;
+        this.Username = Username;
+        this.Medianame = Medianame;
     }
 
     public int getValue() {
@@ -32,5 +36,21 @@ public class Rating {
 
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getUsername() {
+        return Username;
+    }
+
+    public void setUsername(String username) {
+        Username = username;
+    }
+
+    public String getMedianame() {
+        return Medianame;
+    }
+
+    public void setMedianame(String medianame) {
+        Medianame = medianame;
     }
 }

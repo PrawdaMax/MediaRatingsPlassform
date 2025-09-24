@@ -1,0 +1,59 @@
+@startuml
+
+' Classes
+class User {
+    +username: String
+    +password: String
+    +register()
+    +login()
+    +viewProfile()
+    +editProfile()
+    +createMediaEntry()
+    +updateMediaEntry()
+    +deleteMediaEntry()
+    +rateMediaEntry()
+    +editRating()
+    +deleteRating()
+    +likeRating()
+    +markAsFavorite()
+    +viewRatingHistory()
+    +viewFavorites()
+    +getRecommendations()
+}
+
+class MediaEntry {
+    +title: String
+    +description: String
+    +mediaType: String
+    +releaseYear: int
+    +genre: String
+    +ageRestriction: String
+    +createByUser()
+    +editByCreator()
+    +deleteByCreator()
+    +getAverageRating()
+    +addRating()
+    +markAsFavorite()
+}
+
+class Rating {
+    +starValue: int
+    +comment: String
+    +timestamp: DateTime
+    +editRating()
+    +deleteRating()
+    +likeRating()
+    +confirmComment()
+}
+
+' Relationships
+User "1" -- "*" MediaEntry : creates >
+User "1" -- "*" Rating : rates >
+User "1" -- "*" Rating : likes >
+User "*" -- "*" MediaEntry : views >
+User "*" -- "*" MediaEntry : marks as favorite >
+MediaEntry "1" -- "*" Rating : has >
+
+Rating "1" -- "1" MediaEntry : rates >
+Rating "1" -- "1" User : is rated by >
+@enduml
