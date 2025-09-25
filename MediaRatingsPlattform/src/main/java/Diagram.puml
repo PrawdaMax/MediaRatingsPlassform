@@ -1,59 +1,68 @@
 @startuml
-
-' Classes
 class User {
-    +username: String
-    +password: String
-    +register()
-    +login()
-    +viewProfile()
-    +editProfile()
-    +createMediaEntry()
-    +updateMediaEntry()
-    +deleteMediaEntry()
-    +rateMediaEntry()
-    +editRating()
-    +deleteRating()
-    +likeRating()
-    +markAsFavorite()
-    +viewRatingHistory()
-    +viewFavorites()
-    +getRecommendations()
+    - username : String
+    - passwordHash : String
+    - profileStats : ProfileStats
+    --
+    + register()
+    + login()
+    + editProfile()
+    + getFavorites()
+    + getRatings()
+    + addFavorite(MediaEntry)
+}
+
+class ProfileStats {
+    - totalRatings : int
+    - averageScore : double
+    - favoriteGenre : String
 }
 
 class MediaEntry {
-    +title: String
-    +description: String
-    +mediaType: String
-    +releaseYear: int
-    +genre: String
-    +ageRestriction: String
-    +createByUser()
-    +editByCreator()
-    +deleteByCreator()
-    +getAverageRating()
-    +addRating()
-    +markAsFavorite()
+    - id : int
+    - title : String
+    - description : String
+    - type : MediaType
+    - releaseYear : int
+    - genres : List<String>
+    - ageRestriction : int
+    - createdBy : User
+    --
+    + addRating(Rating)
+    + getAverageScore() : double
+}
+
+enum MediaType {
+    movie
+    series
+    game
 }
 
 class Rating {
-    +starValue: int
-    +comment: String
-    +timestamp: DateTime
-    +editRating()
-    +deleteRating()
-    +likeRating()
-    +confirmComment()
+    - id : int
+    - stars : int
+    - comment : String
+    - timestamp : DateTime
+    - confirmed : boolean
+    - createdBy : User
+    --
+    + edit()
+    + delete()
+    + confirm()
+}
+
+class Like {
+    - id : int
+    - user : User
+    - rating : Rating
 }
 
 ' Relationships
-User "1" -- "*" MediaEntry : creates >
-User "1" -- "*" Rating : rates >
-User "1" -- "*" Rating : likes >
-User "*" -- "*" MediaEntry : views >
-User "*" -- "*" MediaEntry : marks as favorite >
-MediaEntry "1" -- "*" Rating : has >
-
-Rating "1" -- "1" MediaEntry : rates >
-Rating "1" -- "1" User : is rated by >
+User "1" -- "0.*" MediaEntry : creates >
+User "1" -- "0.*" Rating : writes >
+User "1" -- "0.*" Like : gives >
+User "0.*" -- "0.*" MediaEntry : favorites >
+MediaEntry "1" -- "0.*" Rating : has >
+Rating "1" -- "0.*" Like : receives >
+User "1" -- "1" ProfileStats : has >
 @enduml

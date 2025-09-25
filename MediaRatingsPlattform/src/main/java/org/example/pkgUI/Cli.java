@@ -94,10 +94,12 @@ public class Cli {
     }
 
     public void ViewAllMedia() {
+        System.out.println("--------------");
         List<String> MediaNames = service.getMediaNames();
         System.out.println("All Media:");
         for (String name : MediaNames) {
             System.out.println(name);
+            System.out.println("--------------");
         }
     }
 
@@ -114,11 +116,13 @@ public class Cli {
         List<Rating> userRatings = service.getUserRatings(Name, Password);
 
         System.out.println("User ratings:");
+        System.out.println("--------------");
         for (Rating rating : userRatings) {
             System.out.print("Media: ");
             System.out.println(rating.getMedianame());
             System.out.print("Your Comment: ");
             System.out.println(rating.getComment());
+            System.out.println("--------------");
         }
     }
 
