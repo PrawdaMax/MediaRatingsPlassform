@@ -9,11 +9,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+//RFC 9526 für Ids
+
 public class Database {
     private List<Media> mediaList = new ArrayList<>();
     private List<Rating> ratingList = new ArrayList<>();
     private List<User> userList = new ArrayList<>();
-    
+
     public Database(){
         userList.add(new User("alice", "12345"));
         userList.add(new User("bob", "12345"));
@@ -67,9 +69,8 @@ public class Database {
         ratingList.add(new Rating(4, "Great potential, still buggy.", "2025-09-24T17:00:00Z", "eve", "Cyberpunk 2077"));
     }
 
-    public boolean addMedia(Media media) {
+    public void addMedia(Media media) {
         mediaList.add(media);
-        return true;
     }
 
     public boolean deleteMedia(Media media) {
@@ -77,9 +78,8 @@ public class Database {
         return true;
     }
 
-    public boolean addRating(Rating rating) {
+    public void addRating(Rating rating) {
         ratingList.add(rating);
-        return true;
     }
 
     public boolean deleteRating(Rating rating) {
@@ -87,14 +87,12 @@ public class Database {
         return true;
     }
 
-    public boolean addUser(User user) {
+    public void addUser(User user) {
         userList.add(user);
-        return true;
     }
 
-    public boolean deleteUser(User user) {
+    public void deleteUser(User user) {
         userList.remove(user);
-        return true;
     }
 
     public boolean findUser(String username, String password) {
@@ -122,5 +120,25 @@ public class Database {
             }
         }
         return ratings;
+    }
+
+    public String getAllData() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(mediaList.toString());
+        sb.append(userList.toString());
+        sb.append(ratingList.toString());
+        return sb.toString();
+    }
+
+    public String getUserData() {
+        return userList.toString();
+    }
+
+    public String getMediaData() {
+        return mediaList.toString();
+    }
+
+    public String getRatingData() {
+        return ratingList.toString();
     }
 }

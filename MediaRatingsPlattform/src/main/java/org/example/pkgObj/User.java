@@ -10,6 +10,14 @@ public class User {
         this.Username = username;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "Username='" + Username + '\'' +
+                ", Password='" + Password + '\'' +
+                '}';
+    }
+
     public String getUsername() {
         return Username;
     }

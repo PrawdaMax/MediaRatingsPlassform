@@ -14,6 +14,17 @@ public class Rating {
         this.Medianame = Medianame;
     }
 
+    @Override
+    public String toString() {
+        return "Rating{" +
+                "value=" + value +
+                ", comment='" + comment + '\'' +
+                ", timestamp='" + timestamp + '\'' +
+                ", Username='" + Username + '\'' +
+                ", Medianame='" + Medianame + '\'' +
+                '}';
+    }
+
     public int getValue() {
         return value;
     }

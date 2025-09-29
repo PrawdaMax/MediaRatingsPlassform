@@ -39,12 +39,28 @@ public class Service {
 
     public void AddMedia(String Username, String MediaName, String Type) {
         List<String> newList = new ArrayList<>();
-        Media media = new Media(MediaName, "", MediaType.valueOf(Type), 2025, newList, 00);
+        Media media = new Media(MediaName, "", MediaType.valueOf(Type), 2025, newList, 0);
         db.addMedia(media);
     }
 
     public void addRating(String Username, String MediaName, int Rating, String Comment) {
         Rating rating = new Rating(Rating, Comment, "", Username, MediaName);
         db.addRating(rating);
+    }
+
+    public String getAllData() {
+        return db.getAllData();
+    }
+
+    public String getMediaData() {
+        return db.getMediaData();
+    }
+
+    public String getUserData() {
+        return db.getUserData();
+    }
+
+    public String getRatingData() {
+        return  db.getRatingData();
     }
 }
