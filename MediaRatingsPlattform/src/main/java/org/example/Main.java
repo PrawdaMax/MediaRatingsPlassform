@@ -5,6 +5,8 @@ import org.example.pkgService.Server;
 import org.example.pkgService.Service;
 import org.example.pkgUI.Cli;
 
+import java.util.UUID;
+
 public class Main {
     public static void main(String[] args) {
         try  {
@@ -13,9 +15,11 @@ public class Main {
             Server server = new Server(8080, service);
             Cli cli = new Cli(service);
 
-            server.startServer();
+            server.start();
             //cli.StartDemo();
 
+            UUID uuid = UUID.randomUUID();
+            System.out.println(uuid.toString());
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }

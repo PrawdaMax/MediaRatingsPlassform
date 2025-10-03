@@ -2,13 +2,10 @@ package org.example.pkgService.pkgHandlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import org.example.pkgService.Server;
 import org.example.pkgService.Service;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ApiHandler implements HttpHandler {
 
@@ -22,7 +19,7 @@ public class ApiHandler implements HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
         String path = exchange.getRequestURI().getPath();
 
-        String response = "";
+        String response;
         int statusCode = 200;
 
         switch (path) {

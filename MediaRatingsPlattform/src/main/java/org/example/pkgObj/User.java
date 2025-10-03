@@ -1,5 +1,7 @@
 package org.example.pkgObj;
 
+import com.google.gson.Gson;
+
 public class User {
 
     private String Username;
@@ -16,6 +18,11 @@ public class User {
                 "Username='" + Username + '\'' +
                 ", Password='" + Password + '\'' +
                 '}';
+    }
+
+    public String toJson() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 
     public String getUsername() {

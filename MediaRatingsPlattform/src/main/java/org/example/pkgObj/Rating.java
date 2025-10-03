@@ -1,5 +1,7 @@
 package org.example.pkgObj;
 
+import com.google.gson.Gson;
+
 public class Rating {
     int value;
     String comment;
@@ -23,6 +25,11 @@ public class Rating {
                 ", Username='" + Username + '\'' +
                 ", Medianame='" + Medianame + '\'' +
                 '}';
+    }
+
+    public String toJson() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 
     public int getValue() {

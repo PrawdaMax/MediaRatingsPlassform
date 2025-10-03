@@ -33,7 +33,7 @@ public class Database {
                 MediaType.game, 2015, Arrays.asList("RPG", "Fantasy"), 18));
 
         mediaList.add(new Media("The Office", "A mockumentary-style sitcom.",
-                MediaType.series, 2005, Arrays.asList("Comedy"), 12));
+                MediaType.series, 2005, List.of("Comedy"), 12));
 
         mediaList.add(new Media("The Matrix", "A hacker discovers reality is a simulation.",
                 MediaType.movie, 1999, Arrays.asList("Action", "Sci-Fi"), 16));
@@ -73,18 +73,8 @@ public class Database {
         mediaList.add(media);
     }
 
-    public boolean deleteMedia(Media media) {
-        mediaList.remove(media);
-        return true;
-    }
-
     public void addRating(Rating rating) {
         ratingList.add(rating);
-    }
-
-    public boolean deleteRating(Rating rating) {
-        ratingList.remove(rating);
-        return true;
     }
 
     public void addUser(User user) {
@@ -124,21 +114,45 @@ public class Database {
 
     public String getAllData() {
         StringBuilder sb = new StringBuilder();
-        sb.append(mediaList.toString());
-        sb.append(userList.toString());
-        sb.append(ratingList.toString());
+        for (User user : userList) {
+            sb.append(user.toJson());
+        }
+        for (Media media : mediaList) {
+            sb.append(media.toJson());
+        }
+        for (Rating rating : ratingList) {
+            sb.append(rating.toJson());
+        }
         return sb.toString();
     }
 
     public String getUserData() {
-        return userList.toString();
+        StringBuilder sb = new StringBuilder();
+
+        for (User user : userList) {
+            sb.append(user.toJson());
+        }
+
+        return sb.toString();
     }
 
     public String getMediaData() {
-        return mediaList.toString();
+        StringBuilder sb = new StringBuilder();
+
+        for (Media media : mediaList) {
+            sb.append(media.toJson());
+        }
+
+        return sb.toString();
     }
 
     public String getRatingData() {
-        return ratingList.toString();
+        StringBuilder sb = new StringBuilder();
+
+        for (Rating rating : ratingList) {
+            sb.append(rating.toJson());
+        }
+
+        return sb.toString();
     }
 }
