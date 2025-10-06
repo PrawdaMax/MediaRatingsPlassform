@@ -1,12 +1,15 @@
 package org.example.pkgDB;
 
-import org.example.pkgMisc.MediaType;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.example.pkgObj.Media;
 import org.example.pkgObj.Rating;
 import org.example.pkgObj.User;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 //RFC 9526 für Ids
@@ -16,57 +19,28 @@ public class Database {
     private List<Rating> ratingList = new ArrayList<>();
     private List<User> userList = new ArrayList<>();
 
-    public Database(){
-        userList.add(new User("alice", "12345"));
-        userList.add(new User("bob", "12345"));
-        userList.add(new User("carol", "12345"));
-        userList.add(new User("dave", "12345"));
-        userList.add(new User("eve", "12345"));
+    public Database() throws FileNotFoundException {
+        Gson gson = new GsonBuilder().create();
 
-        mediaList.add(new Media("Inception", "A mind-bending thriller about dream invasion.",
-                MediaType.movie, 2010, Arrays.asList("Sci-Fi", "Thriller"), 13));
+        InputStream input = Database.class.getResourceAsStream("/TestData.json");
 
-        mediaList.add(new Media("Breaking Bad", "A chemistry teacher turns to drug dealing.",
-                MediaType.series, 2008, Arrays.asList("Crime", "Drama"), 18));
+        if (input == null) {
+            throw new RuntimeException("Could not find TestData.json in resources.");
+        }
 
-        mediaList.add(new Media("The Witcher 3", "A fantasy RPG with rich storytelling.",
-                MediaType.game, 2015, Arrays.asList("RPG", "Fantasy"), 18));
+        InputStreamReader reader = new InputStreamReader(input);
 
-        mediaList.add(new Media("The Office", "A mockumentary-style sitcom.",
-                MediaType.series, 2005, List.of("Comedy"), 12));
+        MediaLibrary library = gson.fromJson(reader, MediaLibrary.class);
 
-        mediaList.add(new Media("The Matrix", "A hacker discovers reality is a simulation.",
-                MediaType.movie, 1999, Arrays.asList("Action", "Sci-Fi"), 16));
+        this.userList = library.Users;
+        this.mediaList = library.Media;
+        this.ratingList = library.Ratings;
+    }
 
-        mediaList.add(new Media("God of War", "A Spartan warrior battles gods and monsters.",
-                MediaType.game, 2018, Arrays.asList("Action", "Adventure"), 18));
-
-        mediaList.add(new Media("Friends", "Six friends navigate life in New York.",
-                MediaType.series, 1994, Arrays.asList("Comedy", "Romance"), 12));
-
-        mediaList.add(new Media("Interstellar", "A journey through space and time.",
-                MediaType.movie, 2014, Arrays.asList("Sci-Fi", "Drama"), 13));
-
-        mediaList.add(new Media("Cyberpunk 2077", "A futuristic open-world RPG.",
-                MediaType.game, 2020, Arrays.asList("RPG", "Sci-Fi"), 18));
-
-        mediaList.add(new Media("The Crown", "A biographical story about the reign of Queen Elizabeth II.",
-                MediaType.series, 2016, Arrays.asList("Drama", "History"), 15));
-
-        ratingList.add(new Rating(5, "Amazing concept!", "2025-09-20T14:00:00Z", "alice", "Inception"));
-        ratingList.add(new Rating(4, "Really good drama series.", "2025-09-21T11:00:00Z", "alice", "Breaking Bad"));
-
-        ratingList.add(new Rating(5, "Fantastic game!", "2025-09-22T10:00:00Z", "bob", "The Witcher 3"));
-        ratingList.add(new Rating(3, "A bit slow for me.", "2025-09-23T09:00:00Z", "bob", "The Crown"));
-
-        ratingList.add(new Rating(4, "Hilarious series!", "2025-09-20T16:00:00Z", "carol", "The Office"));
-        ratingList.add(new Rating(5, "Still relevant and exciting.", "2025-09-24T15:00:00Z", "carol", "The Matrix"));
-
-        ratingList.add(new Rating(5, "Action-packed masterpiece.", "2025-09-21T12:00:00Z", "dave", "God of War"));
-        ratingList.add(new Rating(4, "Funny and nostalgic.", "2025-09-22T13:00:00Z", "dave", "Friends"));
-
-        ratingList.add(new Rating(5, "Mind-blowing visuals and story.", "2025-09-23T14:00:00Z", "eve", "Interstellar"));
-        ratingList.add(new Rating(4, "Great potential, still buggy.", "2025-09-24T17:00:00Z", "eve", "Cyberpunk 2077"));
+    public static class MediaLibrary {
+        public List<User> Users;
+        public List<Media> Media;
+        public List<Rating> Ratings;
     }
 
     public void addMedia(Media media) {
@@ -105,7 +79,7 @@ public class Database {
     public List<Rating> getRatingsOfUser(String username) {
         List<Rating> ratings = new ArrayList<>();
         for (Rating rating : ratingList) {
-            if (rating.getUsername().equals(username)) {
+            if (rating.getUserId().equals(username)) {
                 ratings.add(rating);
             }
         }
@@ -154,5 +128,29 @@ public class Database {
         }
 
         return sb.toString();
+    }
+
+    public List<Media> getMediaList() {
+        return mediaList;
+    }
+
+    public void setMediaList(List<Media> mediaList) {
+        this.mediaList = mediaList;
+    }
+
+    public List<User> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
+    }
+
+    public List<Rating> getRatingList() {
+        return ratingList;
+    }
+
+    public void setRatingList(List<Rating> ratingList) {
+        this.ratingList = ratingList;
     }
 }

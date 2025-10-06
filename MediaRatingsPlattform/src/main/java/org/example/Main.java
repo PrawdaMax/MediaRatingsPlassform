@@ -1,5 +1,6 @@
 package org.example;
 
+import com.github.f4b6a3.uuid.UuidCreator;
 import org.example.pkgDB.Database;
 import org.example.pkgService.Server;
 import org.example.pkgService.Service;
@@ -17,9 +18,6 @@ public class Main {
 
             server.start();
             //cli.StartDemo();
-
-            UUID uuid = UUID.randomUUID();
-            System.out.println(uuid.toString());
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }

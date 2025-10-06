@@ -121,7 +121,7 @@ public class Cli {
         System.out.println("--------------");
         for (Rating rating : userRatings) {
             System.out.print("Media: ");
-            System.out.println(rating.getMedianame());
+            System.out.println(rating.getMediaId());
             System.out.print("Your Comment: ");
             System.out.println(rating.getComment());
             System.out.println("--------------");
@@ -135,6 +135,6 @@ public class Cli {
         int Rating = Integer.parseInt(sc.nextLine());
         System.out.println("Comment: ");
         String Comment = sc.nextLine();
-        service.addRating(Name, MediaName, Rating, Comment);
+        //service.addRating(Name, MediaName, Rating, Comment);
     }
 }

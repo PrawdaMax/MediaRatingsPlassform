@@ -1,0 +1,263 @@
+{
+  "Users": [
+    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa01", "Username": "alice", "Password": "password123" },
+    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa02", "Username": "bob", "Password": "securepass" },
+    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa03", "Username": "carol", "Password": "qwerty" },
+    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa04", "Username": "dave", "Password": "letmein" },
+    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa05", "Username": "eve", "Password": "passw0rd" }
+  ],
+  "Media": [
+    {
+      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb01",
+      "title": "Inception",
+      "description": "A mind-bending thriller about dream invasion.",
+      "mediaType": "movie",
+      "year": 2010,
+      "genres": ["Sci-Fi", "Thriller"],
+      "ageRestriction": 13
+    },
+    {
+      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb02",
+      "title": "Breaking Bad",
+      "description": "A chemistry teacher turns to drug dealing.",
+      "mediaType": "series",
+      "year": 2008,
+      "genres": ["Crime", "Drama"],
+      "ageRestriction": 18
+    },
+    {
+      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03",
+      "title": "The Witcher 3",
+      "description": "A fantasy RPG with rich storytelling.",
+      "mediaType": "game",
+      "year": 2015,
+      "genres": ["RPG", "Fantasy"],
+      "ageRestriction": 18
+    },
+    {
+      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb04",
+      "title": "The Office",
+      "description": "A mockumentary-style sitcom.",
+      "mediaType": "series",
+      "year": 2005,
+      "genres": ["Comedy"],
+      "ageRestriction": 12
+    },
+    {
+      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb05",
+      "title": "The Matrix",
+      "description": "A hacker discovers reality is a simulation.",
+      "mediaType": "movie",
+      "year": 1999,
+      "genres": ["Action", "Sci-Fi"],
+      "ageRestriction": 16
+    },
+    {
+      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb06",
+      "title": "God of War",
+      "description": "A Spartan warrior battles gods and monsters.",
+      "mediaType": "game",
+      "year": 2018,
+      "genres": ["Action", "Adventure"],
+      "ageRestriction": 18
+    },
+    {
+      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb07",
+      "title": "Friends",
+      "description": "Six friends navigate life in New York.",
+      "mediaType": "series",
+      "year": 1994,
+      "genres": ["Comedy", "Romance"],
+      "ageRestriction": 12
+    },
+    {
+      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb08",
+      "title": "Interstellar",
+      "description": "A journey through space and time.",
+      "mediaType": "movie",
+      "year": 2014,
+      "genres": ["Sci-Fi", "Drama"],
+      "ageRestriction": 13
+    },
+    {
+      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb09",
+      "title": "Cyberpunk 2077",
+      "description": "A futuristic open-world RPG.",
+      "mediaType": "game",
+      "year": 2020,
+      "genres": ["RPG", "Sci-Fi"],
+      "ageRestriction": 18
+    },
+    {
+      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb0a",
+      "title": "The Crown",
+      "description": "A biographical story about the reign of Queen Elizabeth II.",
+      "mediaType": "series",
+      "year": 2016,
+      "genres": ["Drama", "History"],
+      "ageRestriction": 15
+    }
+  ],
+  "Ratings": [
+    {
+      "id": "018f3d00-a001-7d12-a8f4-cf03a3a1cc01",
+      "value": 5,
+      "comment": "Amazing concept!",
+      "timestamp": "2025-09-20T14:00:00Z",
+      "userId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa01",
+      "mediaId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb01"
+    },
+    {
+      "id": "018f3d00-a002-7d12-a8f4-cf03a3a1cc02",
+      "value": 4,
+      "comment": "Really good drama series.",
+      "timestamp": "2025-09-21T11:00:00Z",
+      "userId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa01",
+      "mediaId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb02"
+    },
+    {
+      "id": "018f3d00-a003-7d12-a8f4-cf03a3a1cc03",
+      "value": 5,
+      "comment": "Fantastic game!",
+      "timestamp": "2025-09-22T10:00:00Z",
+      "userId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa02",
+      "mediaId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03"
+    },
+    {
+      "id": "018f3d00-a004-7d12-a8f4-cf03a3a1cc04",
+      "value": 3,
+      "comment": "A bit slow for me.",
+      "timestamp": "2025-09-23T09:00:00Z",
+      "userId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa02",
+      "mediaId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb0a"
+    },
+    {
+      "id": "018f3d00-a005-7d12-a8f4-cf03a3a1cc05",
+      "value": 4,
+      "comment": "Hilarious series!",
+      "timestamp": "2025-09-20T16:00:00Z",
+      "userId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa03",
+      "mediaId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb04"
+    },
+    {
+      "id": "018f3d00-a006-7d12-a8f4-cf03a3a1cc06",
+      "value": 5,
+      "comment": "Still relevant and exciting.",
+      "timestamp": "2025-09-24T15:00:00Z",
+      "userId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa03",
+      "mediaId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb05"
+    },
+    {
+      "id": "018f3d00-a007-7d12-a8f4-cf03a3a1cc07",
+      "value": 5,
+      "comment": "Action-packed masterpiece.",
+      "timestamp": "2025-09-21T12:00:00Z",
+      "userId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa04",
+      "mediaId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb06"
+    },
+    {
+      "id": "018f3d00-a008-7d12-a8f4-cf03a3a1cc08",
+      "value": 4,
+      "comment": "Funny and nostalgic.",
+      "timestamp": "2025-09-22T13:00:00Z",
+      "userId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa04",
+      "mediaId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb07"
+    },
+    {
+      "id": "018f3d00-a009-7d12-a8f4-cf03a3a1cc09",
+      "value": 5,
+      "comment": "Mind-blowing visuals and story.",
+      "timestamp": "2025-09-23T14:00:00Z",
+      "userId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa05",
+      "mediaId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb08"
+    },
+    {
+      "id": "018f3d00-a00a-7d12-a8f4-cf03a3a1cc0a",
+      "value": 4,
+      "comment": "Great potential, still buggy.",
+      "timestamp": "2025-09-24T17:00:00Z",
+      "userId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa05",
+      "mediaId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb09"
+    },
+    {
+      "id": "018f3d00-a00b-7d12-a8f4-cf03a3a1cc0b",
+      "value": 3,
+      "comment": "Interesting but a bit confusing.",
+      "timestamp": "2025-09-25T10:00:00Z",
+      "userId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa01",
+      "mediaId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb08"
+    },
+    {
+      "id": "018f3d00-a00c-7d12-a8f4-cf03a3a1cc0c",
+      "value": 4,
+      "comment": "A classic, always worth rewatching.",
+      "timestamp": "2025-09-25T11:30:00Z",
+      "userId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa01",
+      "mediaId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb05"
+    },
+    {
+      "id": "018f3d00-a00d-7d12-a8f4-cf03a3a1cc0d",
+      "value": 5,
+      "comment": "Incredible story and visuals!",
+      "timestamp": "2025-09-25T12:45:00Z",
+      "userId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa02",
+      "mediaId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb01"
+    },
+    {
+      "id": "018f3d00-a00e-7d12-a8f4-cf03a3a1cc0e",
+      "value": 2,
+      "comment": "Didn’t live up to the hype.",
+      "timestamp": "2025-09-25T13:20:00Z",
+      "userId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa03",
+      "mediaId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb09"
+    },
+    {
+      "id": "018f3d00-a00f-7d12-a8f4-cf03a3a1cc0f",
+      "value": 5,
+      "comment": "Masterpiece. The writing is genius.",
+      "timestamp": "2025-09-25T14:40:00Z",
+      "userId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa03",
+      "mediaId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb02"
+    },
+    {
+      "id": "018f3d00-a010-7d12-a8f4-cf03a3a1cc10",
+      "value": 4,
+      "comment": "Fun co-op experience.",
+      "timestamp": "2025-09-25T15:15:00Z",
+      "userId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa04",
+      "mediaId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb06"
+    },
+    {
+      "id": "018f3d00-a011-7d12-a8f4-cf03a3a1cc11",
+      "value": 3,
+      "comment": "It’s okay, just not my type of humor.",
+      "timestamp": "2025-09-25T15:45:00Z",
+      "userId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa04",
+      "mediaId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb07"
+    },
+    {
+      "id": "018f3d00-a012-7d12-a8f4-cf03a3a1cc12",
+      "value": 5,
+      "comment": "Felt like I was in another world!",
+      "timestamp": "2025-09-25T16:10:00Z",
+      "userId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa05",
+      "mediaId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03"
+    },
+    {
+      "id": "018f3d00-a013-7d12-a8f4-cf03a3a1cc13",
+      "value": 4,
+      "comment": "Solid game with a great story.",
+      "timestamp": "2025-09-25T17:00:00Z",
+      "userId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa05",
+      "mediaId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb06"
+    },
+    {
+      "id": "018f3d00-a014-7d12-a8f4-cf03a3a1cc14",
+      "value": 2,
+      "comment": "The pacing was too slow for me.",
+      "timestamp": "2025-09-25T18:30:00Z",
+      "userId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa01",
+      "mediaId": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb0a"
+    }
+  ]
+}

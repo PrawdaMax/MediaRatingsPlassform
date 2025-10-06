@@ -8,10 +8,12 @@ import org.example.pkgObj.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class Service {
 
-    Database db = new Database();
+    Database db;
 
     public Service(Database database) {
         this.db = database;
@@ -43,8 +45,8 @@ public class Service {
         db.addMedia(media);
     }
 
-    public void addRating(String Username, String MediaName, int Rating, String Comment) {
-        Rating rating = new Rating(Rating, Comment, "", Username, MediaName);
+    public void addRating(UUID userId, UUID mediaId, int Rating, String Comment) {
+        Rating rating = new Rating(Rating, Comment, "", userId, mediaId);
         db.addRating(rating);
     }
 
@@ -52,15 +54,71 @@ public class Service {
         return db.getAllData();
     }
 
-    public String getMediaData() {
-        return db.getMediaData();
+    public String getQueryMediaData(Map<String, String> queryParams) {
+        List<Media> mediaList = db.getMediaList();
+        String returnval = "Media not found";
+
+        if (mediaList != null && !queryParams.isEmpty() && queryParams.containsKey("id")) {
+            UUID id = UUID.fromString(queryParams.get("id"));
+            for (Media media : mediaList) {
+                if (media.getId().equals(id)) {
+                    returnval = media.toJson();
+                }
+            }
+        } else {
+            returnval = db.getMediaData();
+        }
+
+        return returnval;
     }
 
-    public String getUserData() {
-        return db.getUserData();
+    public String getQueryUserData(Map<String, String> queryParams) {
+        List<User> userList = db.getUserList();
+        String returnval = "User not found";
+
+        if (userList != null && !queryParams.isEmpty() && queryParams.containsKey("id")) {
+            UUID id = UUID.fromString(queryParams.get("id"));
+            for (User user : userList) {
+                if (user.getId().equals(id)) {
+                    returnval = user.toJson();
+                }
+            }
+        } else {
+            returnval = db.getUserData();
+        }
+
+        return returnval;
     }
 
-    public String getRatingData() {
-        return  db.getRatingData();
+    public String getQueryRatingData(Map<String, String> queryParams) {
+        List<Rating> ratingList = db.getRatingList();
+        String returnval = "";
+
+        if (ratingList != null && !queryParams.isEmpty() && queryParams.containsKey("id")) {
+            UUID id = UUID.fromString(queryParams.get("id"));
+            for (Rating rating : ratingList) {
+                if (rating.getId().equals(id)) {
+                    returnval = rating.toJson();
+                }
+            }
+        } else if (ratingList != null && !queryParams.isEmpty() && queryParams.containsKey("userId")) {
+            UUID userId = UUID.fromString(queryParams.get("userId"));
+            for (Rating rating : ratingList) {
+                if (rating.getUserId().equals(userId)) {
+                    returnval = returnval.concat(rating.toJson());
+                }
+            }
+        } else if (ratingList != null && !queryParams.isEmpty() && queryParams.containsKey("mediaId")) {
+            UUID mediaId = UUID.fromString(queryParams.get("mediaId"));
+            for (Rating rating : ratingList) {
+                if (rating.getMediaId().equals(mediaId)) {
+                    returnval = returnval.concat(rating.toJson());
+                }
+            }
+        } else {
+            returnval = db.getRatingData();
+        }
+
+        return returnval;
     }
 }

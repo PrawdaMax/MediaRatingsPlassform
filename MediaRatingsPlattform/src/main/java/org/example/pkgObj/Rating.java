@@ -1,30 +1,32 @@
 package org.example.pkgObj;
 
+import com.github.f4b6a3.uuid.UuidCreator;
 import com.google.gson.Gson;
 
+import java.util.UUID;
+
 public class Rating {
+    private UUID id;
+    private UUID userId;
+    private UUID mediaId;
     int value;
     String comment;
     String timestamp;
-    private String Username;
-    private String Medianame;
 
-    public Rating(int value, String comment, String timestamp, String Username, String Medianame) {
+    public Rating(int value, String comment, String timestamp, UUID userId, UUID mediaId) {
+        this.id = UuidCreator.getTimeOrderedEpoch();
         this.value = value;
         this.comment = comment;
-        this.Username = Username;
-        this.Medianame = Medianame;
+        this.userId = userId;
+        this.mediaId = mediaId;
     }
 
-    @Override
-    public String toString() {
-        return "Rating{" +
-                "value=" + value +
-                ", comment='" + comment + '\'' +
-                ", timestamp='" + timestamp + '\'' +
-                ", Username='" + Username + '\'' +
-                ", Medianame='" + Medianame + '\'' +
-                '}';
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String toJson() {
@@ -56,19 +58,19 @@ public class Rating {
         this.timestamp = timestamp;
     }
 
-    public String getUsername() {
-        return Username;
+    public UUID getUserId() {
+        return userId;
     }
 
-    public void setUsername(String username) {
-        Username = username;
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 
-    public String getMedianame() {
-        return Medianame;
+    public UUID getMediaId() {
+        return mediaId;
     }
 
-    public void setMedianame(String medianame) {
-        Medianame = medianame;
+    public void setMediaId(UUID mediaId) {
+        this.mediaId = mediaId;
     }
 }

@@ -1,23 +1,27 @@
 package org.example.pkgObj;
 
+import com.github.f4b6a3.uuid.UuidCreator;
 import com.google.gson.Gson;
 
-public class User {
+import java.util.UUID;
 
+public class User {
+    private UUID id;
     private String Username;
     private String Password;
 
     public User (String username, String password) {
+        this.id = UuidCreator.getTimeOrderedEpoch();
         this.Password = password;
         this.Username = username;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "Username='" + Username + '\'' +
-                ", Password='" + Password + '\'' +
-                '}';
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String toJson() {

@@ -4,6 +4,8 @@ import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
 import org.example.pkgService.pkgHandlers.ApiHandler;
+import org.example.pkgService.pkgHandlers.LoginHandler;
+import org.example.pkgService.pkgHandlers.RegisterHandler;
 import org.example.pkgService.pkgHandlers.RootHandler;
 
 import java.io.IOException;
@@ -33,6 +35,8 @@ public class Server {
     private void registerContexts(HttpServer server) {
         server.createContext("/", new RootHandler());
         server.createContext("/api", new ApiHandler(service));
+        server.createContext("/api/login", new LoginHandler(service));
+        server.createContext("/api/register", new RegisterHandler(service));
     }
 
     private void logStartup() {
