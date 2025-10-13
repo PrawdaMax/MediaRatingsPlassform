@@ -51,8 +51,19 @@ public class Database {
         ratingList.add(rating);
     }
 
-    public void addUser(User user) {
-        userList.add(user);
+    public boolean addUser(User user) {
+        boolean result = true;
+        for (User u : userList) {
+            if (u.getUsername().equals(user.getUsername()) && u.getPassword().equals(user.getPassword())) {
+                result = false;
+            }
+        }
+
+        if (result) {
+            userList.add(user);
+        }
+
+        return result;
     }
 
     public void deleteUser(User user) {
