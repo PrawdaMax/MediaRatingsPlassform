@@ -6,6 +6,10 @@ import org.example.pkgServer.Server;
 import org.example.pkgService.Service;
 import org.example.pkgUI.Cli;
 
+/*
+Get Recomentations by Content
+ */
+
 public class Main {
     public static void main(String[] args) {
         try  {
@@ -14,7 +18,6 @@ public class Main {
             Server server = new Server(8080, service);
 
             server.start();
-            //cli.StartDemo();
 
         } catch (Exception ex) {
             System.out.println(ex.getMessage());

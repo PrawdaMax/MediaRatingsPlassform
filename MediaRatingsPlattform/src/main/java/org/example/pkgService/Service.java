@@ -1,14 +1,14 @@
 package org.example.pkgService;
 
 import com.google.gson.Gson;
+import io.jsonwebtoken.security.Request;
 import org.example.pkgDB.Database;
 import org.example.pkgMisc.MediaType;
-import org.example.pkgObj.Media;
-import org.example.pkgObj.Rating;
-import org.example.pkgObj.User;
+import org.example.pkgObj.*;
 import org.json.JSONObject;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Service {
     Gson gson = new Gson();
@@ -541,4 +541,232 @@ public class Service {
 
         return result;
     }
+
+    public Map<String, Object> getUserFavorites(UUID uuid) {
+        Map<String, Object> result = new HashMap<>();
+        List<Media> mediaList = db.getMediaList();
+
+        result.put("response", "ERROR: Not found");
+        result.put("statusCode", 404);
+
+        try {
+            StringBuilder sb = new StringBuilder();
+            User user = db.getUser(uuid);
+            List<UUID> favorites = user.getFavorites();
+            List<Media> favoriteMedia = mediaList.stream()
+                    .filter(media -> favorites.contains(media.getId()))
+                    .toList();
+
+            for (Media media : favoriteMedia) {
+                sb.append(media.toJson());
+            }
+
+            result.put("response", sb.toString());
+            result.put("statusCode", 200);
+
+        } catch (Exception e) {
+            result.put("response", "ERROR: Bad Request");
+            result.put("statusCode", 409);
+        }
+
+        return result;
+    }
+
+    public Map<String, Object> markAsFavorite(UUID uuid, String body) {
+        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> userMap = new Gson().fromJson(body, Map.class);
+
+        result.put("response", "ERROR: Not found");
+        result.put("statusCode", 404);
+
+        try {
+            UUID userid = UUID.fromString((String) userMap.get("user"));
+            User user  = db.getUser(userid);
+
+            boolean isInside = false;
+            for (UUID favorite : user.getFavorites()) {
+                if (favorite.equals(uuid)) {
+                    isInside = true;
+                }
+            }
+            if (!isInside) {
+                user.addFavorite(uuid);
+
+                result.put("response", "Marked as Favorite");
+                result.put("statusCode", 200);
+            } else {
+                result.put("response", "ERROR: Already Favorite");
+                result.put("statusCode", 400);
+            }
+
+        } catch (Exception e) {
+            result.put("response", "ERROR: Bad Request");
+            result.put("statusCode", 400);
+        }
+
+        return result;
+    }
+
+    public Map<String, Object> unmarkAsFavorite(UUID uuid, String body) {
+        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> userMap = new Gson().fromJson(body, Map.class);
+
+        result.put("response", "ERROR: Not found");
+        result.put("statusCode", 404);
+
+        try {
+            UUID userid = UUID.fromString((String) userMap.get("user"));
+            User user  = db.getUser(userid);
+
+            boolean isInside = false;
+            for (UUID favorite : user.getFavorites()) {
+                if (favorite.equals(uuid)) {
+                    isInside = true;
+                }
+            }
+            if (isInside) {
+                user.deleteFavorite(uuid);
+
+                result.put("response", "Unmarked as Favorite");
+                result.put("statusCode", 200);
+            } else {
+                result.put("response", "ERROR: No Favorite");
+                result.put("statusCode", 400);
+            }
+
+        } catch (Exception e) {
+            result.put("response", "ERROR: Bad Request");
+            result.put("statusCode", 400);
+        }
+
+        return result;
+    }
+
+    public Map<String, Object> getLeaderboard() {
+        Map<String, Object> result = new HashMap<>();
+        List<User> userList = db.getUserList();
+        List<Rating> ratingList = db.getRatingList();
+
+        result.put("response", "ERROR: Not found");
+        result.put("statusCode", 404);
+
+        try {
+
+            Map<UUID, List<Rating>> ratingsByUserId = ratingList.stream()
+                    .collect(Collectors.groupingBy(Rating::getUserId));
+
+            List<UserWithRatings> userWithRatingsList = userList.stream()
+                    .map(user -> new UserWithRatings(
+                            user,
+                            ratingsByUserId.getOrDefault(user.getId(), new ArrayList<>())
+                    ))
+                    .sorted(Comparator.comparingInt((UserWithRatings uwr) -> uwr.getRatings().size()).reversed())
+                    .collect(Collectors.toList());
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("[\n");
+            for (UserWithRatings userWithRatings : userWithRatingsList) {
+                sb.append(userWithRatings.toJson());
+                sb.append(",\n");
+            }
+            sb.append("]");
+            result.put("response", sb.toString());
+            result.put("statusCode", 200);
+
+        } catch (Exception e) {
+            result.put("response", "ERROR: Bad Request");
+            result.put("statusCode", 400);
+        }
+
+        return result;
+    }
+
+    public Map<String, Object> getUserRecs(UUID uuid, Map<String, String> queryParams) {
+        Map<String, Object> result = new HashMap<>();
+        List<Media> mediaList = db.getMediaList();
+
+        result.put("response", "ERROR: Not found");
+        result.put("statusCode", 404);
+
+        try {
+
+            if (queryParams.containsKey("type")) {
+                if (queryParams.get("type").equals("genre")) {
+                    User user = db.getUser(uuid);
+                    List<String> favGenres = user.getFavoriteGenres();
+
+                    List<Media> matchingMedia = mediaList.stream()
+                            .filter(media -> !Collections.disjoint(media.getGenres(), favGenres))
+                            .sorted(Comparator.comparingInt((Media media) ->
+                                    (int) media.getGenres().stream()
+                                            .filter(favGenres::contains)
+                                            .count()
+                            ).reversed())
+                            .collect(Collectors.toList());
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("[\n");
+                    for (Media media : matchingMedia) {
+                        sb.append(media.toJson());
+                        sb.append(",\n");
+                    }
+                    sb.append("]");
+
+                    result.put("response", sb.toString());
+                    result.put("statusCode", 200);
+
+                } else if (queryParams.get("type").equals("content")) {
+                    result.put("response", "ERROR: Not yet Implemented");
+                    result.put("statusCode", 400);
+                }
+            }
+
+        } catch (Exception e) {
+            result.put("response", "ERROR: Bad Request");
+            result.put("statusCode", 400);
+        }
+
+        return result;
+    }
+
+    public Map<String, Object> likeRating(UUID uuid, String body) {
+        Map<String, Object> result = new HashMap<>();
+
+        result.put("response", "ERROR: Not found");
+        result.put("statusCode", 404);
+
+        try {
+            Map request = gson.fromJson(body, Map.class);
+            UUID userId = UUID.fromString(request.get("user").toString());
+
+            Like like = new Like(userId, uuid);
+            List<Like> likeList = db.getLikes();
+            boolean hasLiked = false;
+
+            for (Like listlike : likeList) {
+                if (listlike.getUserId().equals(like.getUserId()) && listlike.getRatingId().equals(like.getRatingId())) {
+                    hasLiked = true;
+                    break;
+                }
+            }
+
+            if (!hasLiked) {
+                db.addLike(like);
+                result.put("response", "Rating Liked");
+                result.put("statusCode", 200);
+            } else {
+                result.put("response", "ERROR: Rating already liked");
+                result.put("statusCode", 400);
+            }
+
+
+        } catch (Exception e) {
+            result.put("response", "ERROR: Bad Request");
+            result.put("statusCode", 400);
+        }
+
+        return result;
+    }
+
 }

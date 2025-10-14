@@ -8,13 +8,13 @@ import java.util.UUID;
 public class Like {
     private UUID id;
     private UUID userId;
-    private UUID mediaId;
+    private UUID ratingId;
     private String timestamp;
 
-    public Like(UUID userId, UUID mediaId) {
+    public Like(UUID userId, UUID ratingId) {
         this.id = UuidCreator.getTimeOrderedEpoch();
         this.userId = userId;
-        this.mediaId = mediaId;
+        this.ratingId = ratingId;
     }
 
     public UUID getId() {
@@ -42,11 +42,11 @@ public class Like {
         this.userId = userId;
     }
 
-    public UUID getMediaId() {
-        return mediaId;
+    public UUID getRatingId() {
+        return ratingId;
     }
 
-    public void setMediaId(UUID mediaId) {
-        this.mediaId = mediaId;
+    public void setRatingId(UUID ratingId) {
+        this.ratingId = ratingId;
     }
 }

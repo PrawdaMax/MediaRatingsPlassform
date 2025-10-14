@@ -64,6 +64,18 @@ public class Database {
         ratingList.add(rating);
     }
 
+    public void addLike(Like like) {
+        likesList.add(like);
+    }
+
+    public void deleteLike(UUID uuid) {
+        for (Like like : likesList) {}
+    }
+
+    public List<Like> getLikes() {
+        return likesList;
+    }
+
     public boolean addUser(User user) {
         boolean result = true;
         for (User u : userList) {
@@ -192,5 +204,15 @@ public class Database {
 
     public void removeToken(String token) {
         tokenList.remove(token);
+    }
+
+    public User getUser(UUID uuid) {
+        User retUser = null;
+        for (User user : userList) {
+            if (user.getId().equals(uuid)) {
+                retUser = user;
+            }
+        }
+        return retUser;
     }
 }

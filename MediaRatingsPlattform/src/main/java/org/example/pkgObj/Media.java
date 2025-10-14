@@ -15,7 +15,6 @@ public class Media {
     private int year;
     private List<String> genres;
     private int ageRestriction;
-    private List<Rating> ratings = null;
 
     public Media(String title, String description, MediaType mediaType, int year, List<String> genres, int ageRestriction) {
         this.id = UuidCreator.getTimeOrderedEpoch();
@@ -86,13 +85,5 @@ public class Media {
 
     public void setAgeRestriction(int ageRestriction) {
         this.ageRestriction = ageRestriction;
-    }
-
-    public List<Rating> getRatings() {
-        return ratings;
-    }
-
-    public void setRatings(List<Rating> ratings) {
-        this.ratings = ratings;
     }
 }

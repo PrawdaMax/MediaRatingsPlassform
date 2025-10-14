@@ -3,17 +3,49 @@ package org.example.pkgObj;
 import com.github.f4b6a3.uuid.UuidCreator;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class User {
     private UUID id;
     private String Username;
     private String Password;
+    private List<UUID> favorites;
+    private List<String> favoriteGenres;
 
     public User (String username, String password) {
         this.id = UuidCreator.getTimeOrderedEpoch();
         this.Password = password;
         this.Username = username;
+        this.favorites = new ArrayList<>();
+        this.favoriteGenres = new ArrayList<>();
+    }
+
+    public User() {}
+
+    public void addFavoriteGenre(String genre){
+        this.favoriteGenres.add(genre);
+    }
+
+    public void removeFavoriteGenre(String genre){
+        this.favoriteGenres.remove(genre);
+    }
+
+    public List<String> getFavoriteGenres(){
+        return this.favoriteGenres;
+    }
+
+    public void addFavorite(UUID uuid) {
+        favorites.add(uuid);
+    }
+
+    public void deleteFavorite(UUID uuid) {
+        favorites.remove(uuid);
+    }
+
+    public List<UUID> getFavorites() {
+        return favorites;
     }
 
     public UUID getId() {

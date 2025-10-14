@@ -46,18 +46,18 @@ public class ApiHandler implements HttpHandler {
             case "GET /api/users/:id/profile":
                 result = service.getUser(getUUID(path));
                 break;
-            /*case "PUT /api/users/:id/profile":
+            case "PUT /api/users/:id/profile":
                 result = service.updateUser(getUUID(path), body);
-                break;*/
+                break;
             case "GET /api/users/:id/ratings":
                 result = service.getUserRatings(getUUID(path));
                 break;
-            /*case "GET /api/users/:id/favorites":
-                result = service.getUserLikes(exchange);
+            case "GET /api/users/:id/favorites":
+                result = service.getUserFavorites(getUUID(path));
                 break;
             case "GET /api/users/:id/recommendations":
-                result = service.getUserRecs(exchange);
-                break;*/
+                result = service.getUserRecs(getUUID(path), queryParams);
+                break;
             case "GET /api/media":
                 result = service.getAllMedia(queryParams);
                 break;
@@ -79,21 +79,21 @@ public class ApiHandler implements HttpHandler {
             case "PUT /api/ratings/:id":
                 result = service.updateRating(getUUID(path), body);
                 break;
-            /*case "POST /api/ratings/:id/like":
-                result = service.like(exchange);
-                break;*/
+            case "POST /api/ratings/:id/like":
+                result = service.likeRating(getUUID(path), body);
+                break;
             case "POST /api/ratings/:id/confirm":
                 result = service.confirmRating(getUUID(path));
                 break;
-            /*case "POST /api/media/:id/favorite":
-                result = service.mark(exchange);
+            case "POST /api/media/:id/favorite":
+                result = service.markAsFavorite(getUUID(path), body);
                 break;
             case "DELETE /api/media/:id/favorite":
-                result = service.unmark(exchange);
+                result = service.unmarkAsFavorite(getUUID(path), body);
                 break;
             case "GET /api/leaderboard":
-                result = service.get(exchange);
-                break;*/
+                result = service.getLeaderboard();
+                break;
             default:
                 result.put("statusCode", 404);
                 result.put("response", "{\"error\":\"Not Found\"}");

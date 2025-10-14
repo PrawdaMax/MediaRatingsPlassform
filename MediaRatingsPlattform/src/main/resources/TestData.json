@@ -1,10 +1,53 @@
 {
   "Users": [
-    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa01", "Username": "alice", "Password": "password123" },
-    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa02", "Username": "bob", "Password": "securepass" },
-    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa03", "Username": "carol", "Password": "qwerty" },
-    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa04", "Username": "dave", "Password": "letmein" },
-    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa05", "Username": "eve", "Password": "passw0rd" }
+    {
+      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa01",
+      "Username": "alice",
+      "Password": "password123",
+      "favorites": [
+        "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb02",
+        "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03"
+      ],
+      "favoriteGenres": ["Drama", "Sci-Fi"]
+    },
+    {
+      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa02",
+      "Username": "bob",
+      "Password": "securepass",
+      "favorites": [
+        "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03",
+        "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb01"
+      ],
+      "favoriteGenres": ["Action", "Comedy"]
+    },
+    {
+      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa03",
+      "Username": "carol",
+      "Password": "qwerty",
+      "favorites": [
+        "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03"
+      ],
+      "favoriteGenres": ["Horror", "Thriller"]
+    },
+    {
+      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa04",
+      "Username": "dave",
+      "Password": "letmein",
+      "favorites": [
+        "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03",
+        "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb04"
+      ],
+      "favoriteGenres": ["Documentary", "Drama"]
+    },
+    {
+      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa05",
+      "Username": "eve",
+      "Password": "passw0rd",
+      "favorites": [
+        "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb01"
+      ],
+      "favoriteGenres": ["Romance", "Fantasy"]
+    }
   ],
   "Media": [
     {
