@@ -5,55 +5,25 @@ import com.google.gson.Gson;
 
 import java.util.UUID;
 
-public class Rating {
+public class Like {
     private UUID id;
     private UUID userId;
     private UUID mediaId;
-    int value;
-    String comment;
-    String timestamp;
-    Boolean confirmed;
+    private String timestamp;
 
-    public Rating(int value, String comment, String timestamp, UUID userId, UUID mediaId) {
+    public Like(UUID userId, UUID mediaId) {
         this.id = UuidCreator.getTimeOrderedEpoch();
-        this.value = value;
-        this.comment = comment;
         this.userId = userId;
         this.mediaId = mediaId;
-        this.confirmed = false;
-    }
-
-    public void confirm() {
-        this.confirmed = true;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
     }
 
     public String getTimestamp() {

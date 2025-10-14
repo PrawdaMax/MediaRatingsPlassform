@@ -1,8 +1,8 @@
-package org.example.pkgService;
+package org.example.pkgServer;
 
 import com.sun.net.httpserver.HttpServer;
-import org.example.pkgService.pkgHandlers.ApiHandler;
-import org.example.pkgService.pkgHandlers.RootHandler;
+import org.example.pkgServer.pkgHandlers.*;
+import org.example.pkgService.Service;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

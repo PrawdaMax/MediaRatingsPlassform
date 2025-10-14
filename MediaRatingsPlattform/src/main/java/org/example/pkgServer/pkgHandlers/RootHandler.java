@@ -1,4 +1,4 @@
-package org.example.pkgService.pkgHandlers;
+package org.example.pkgServer.pkgHandlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;

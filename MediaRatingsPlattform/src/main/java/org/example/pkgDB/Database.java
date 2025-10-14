@@ -2,6 +2,7 @@ package org.example.pkgDB;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.example.pkgObj.Like;
 import org.example.pkgObj.Media;
 import org.example.pkgObj.Rating;
 import org.example.pkgObj.User;
@@ -11,6 +12,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 //RFC 9526 für Ids
 
@@ -18,6 +20,8 @@ public class Database {
     private List<Media> mediaList = new ArrayList<>();
     private List<Rating> ratingList = new ArrayList<>();
     private List<User> userList = new ArrayList<>();
+    private List<Like> likesList = new ArrayList<>();
+    private List<String> tokenList = new ArrayList<>();
 
     public Database() throws FileNotFoundException {
         Gson gson = new GsonBuilder().create();
@@ -35,6 +39,7 @@ public class Database {
         this.userList = library.Users;
         this.mediaList = library.Media;
         this.ratingList = library.Ratings;
+        this.likesList = new ArrayList<>();
     }
 
     public static class MediaLibrary {
@@ -45,6 +50,14 @@ public class Database {
 
     public void addMedia(Media media) {
         mediaList.add(media);
+    }
+
+    public void deleteMedia(UUID uuid) {
+        for (Media media : mediaList) {
+            if (media.getId().equals(uuid)) {
+                mediaList.remove(media);
+            }
+        }
     }
 
     public void addRating(Rating rating) {
@@ -87,10 +100,10 @@ public class Database {
         return list;
     }
 
-    public List<Rating> getRatingsOfUser(String username) {
+    public List<Rating> getRatingsOfUser(UUID uuid) {
         List<Rating> ratings = new ArrayList<>();
         for (Rating rating : ratingList) {
-            if (rating.getUserId().equals(username)) {
+            if (rating.getUserId().equals(uuid)) {
                 ratings.add(rating);
             }
         }
@@ -163,5 +176,21 @@ public class Database {
 
     public void setRatingList(List<Rating> ratingList) {
         this.ratingList = ratingList;
+    }
+
+    public List<String> getTokenList() {
+        return tokenList;
+    }
+
+    public void setTokenList(List<String> tokenList) {
+        this.tokenList = tokenList;
+    }
+
+    public void addToken(String token) {
+        tokenList.add(token);
+    }
+
+    public void removeToken(String token) {
+        tokenList.remove(token);
     }
 }

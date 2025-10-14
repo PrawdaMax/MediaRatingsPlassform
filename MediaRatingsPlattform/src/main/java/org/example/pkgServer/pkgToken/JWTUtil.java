@@ -1,4 +1,4 @@
-package org.example.pkgService.pkgHandlers;
+package org.example.pkgServer.pkgToken;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -12,10 +12,10 @@ import java.util.Map;
 
 public class JWTUtil {
 
-    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private static final long EXPIRATION_TIME = 86400000;
+    private final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final long EXPIRATION_TIME = 86400000; //24h
 
-    public static String generateToken(String userId, String username) {
+    public String generateToken(String userId, String username) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", username);
 
@@ -28,7 +28,7 @@ public class JWTUtil {
                 .compact();
     }
 
-    public static Claims validateToken(String token) {
+    public Claims validateToken(String token) {
         try {
             return Jwts.parser()
                     .setSigningKey(SECRET_KEY)
@@ -36,16 +36,16 @@ public class JWTUtil {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
-            return null; // Invalid token
+            return null;
         }
     }
 
-    public static String getUserIdFromToken(String token) {
+    public String getUserIdFromToken(String token) {
         Claims claims = validateToken(token);
         return claims != null ? claims.getSubject() : null;
     }
 
-    public static boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         Claims claims = validateToken(token);
         if (claims == null) return true;
         return claims.getExpiration().before(new Date());
