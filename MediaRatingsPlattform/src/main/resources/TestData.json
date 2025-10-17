@@ -2,8 +2,8 @@
   "Users": [
     {
       "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa01",
-      "Username": "alice",
-      "Password": "password123",
+      "username": "alice",
+      "password": "password123",
       "favorites": [
         "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb02",
         "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03"
@@ -12,8 +12,8 @@
     },
     {
       "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa02",
-      "Username": "bob",
-      "Password": "securepass",
+      "username": "bob",
+      "password": "securepass",
       "favorites": [
         "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03",
         "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb01"
@@ -22,17 +22,18 @@
     },
     {
       "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa03",
-      "Username": "carol",
-      "Password": "qwerty",
+      "username": "carol",
+      "password": "qwerty",
       "favorites": [
-        "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03"
+        "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03",
+        "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb0a"
       ],
       "favoriteGenres": ["Horror", "Thriller"]
     },
     {
       "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa04",
-      "Username": "dave",
-      "Password": "letmein",
+      "username": "dave",
+      "password": "letmein",
       "favorites": [
         "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03",
         "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb04"
@@ -41,8 +42,8 @@
     },
     {
       "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa05",
-      "Username": "eve",
-      "Password": "passw0rd",
+      "username": "eve",
+      "password": "passw0rd",
       "favorites": [
         "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb01"
       ],

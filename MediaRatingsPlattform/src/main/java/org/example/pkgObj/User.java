@@ -9,15 +9,15 @@ import java.util.UUID;
 
 public class User {
     private UUID id;
-    private String Username;
-    private String Password;
+    private String username;
+    private String password;
     private List<UUID> favorites;
     private List<String> favoriteGenres;
 
     public User (String username, String password) {
         this.id = UuidCreator.getTimeOrderedEpoch();
-        this.Password = password;
-        this.Username = username;
+        this.password = password;
+        this.username = username;
         this.favorites = new ArrayList<>();
         this.favoriteGenres = new ArrayList<>();
     }
@@ -62,18 +62,18 @@ public class User {
     }
 
     public String getUsername() {
-        return Username;
+        return username;
     }
 
     public void setUsername(String username) {
-        Username = username;
+        this.username = username;
     }
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 
     public void setPassword(String password) {
-        Password = password;
+        this.password = password;
     }
 }

@@ -6,6 +6,7 @@ import org.example.pkgObj.Like;
 import org.example.pkgObj.Media;
 import org.example.pkgObj.Rating;
 import org.example.pkgObj.User;
+import org.example.pkgServer.pkgToken.JWTUtil;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -17,11 +18,11 @@ import java.util.UUID;
 //RFC 9526 für Ids
 
 public class Database {
-    private List<Media> mediaList = new ArrayList<>();
-    private List<Rating> ratingList = new ArrayList<>();
-    private List<User> userList = new ArrayList<>();
-    private List<Like> likesList = new ArrayList<>();
-    private List<String> tokenList = new ArrayList<>();
+    private List<Media> mediaList;
+    private List<Rating> ratingList;
+    private List<User> userList;
+    private List<Like> likesList;
+    private List<String> tokenList;
 
     public Database() throws FileNotFoundException {
         Gson gson = new GsonBuilder().create();
@@ -40,6 +41,7 @@ public class Database {
         this.mediaList = library.Media;
         this.ratingList = library.Ratings;
         this.likesList = new ArrayList<>();
+        this.tokenList = new ArrayList<>();
     }
 
     public static class MediaLibrary {
@@ -192,6 +194,19 @@ public class Database {
 
     public List<String> getTokenList() {
         return tokenList;
+    }
+
+    public String getToken(UUID uuid) {
+        JWTUtil util = new JWTUtil();
+        String resp = "";
+
+        for (String token : tokenList) {
+            if (util.getUserIdFromToken(token).equals(uuid.toString())) {
+                resp = token;
+            }
+        }
+
+        return resp;
     }
 
     public void setTokenList(List<String> tokenList) {

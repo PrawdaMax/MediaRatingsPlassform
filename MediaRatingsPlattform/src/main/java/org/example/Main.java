@@ -7,7 +7,11 @@ import org.example.pkgService.Service;
 import org.example.pkgUI.Cli;
 
 /*
-Get Recomentations by Content
+Get Recommendations by Content
+
+Code Cleanup
+
+Documentation
  */
 
 public class Main {
@@ -18,7 +22,6 @@ public class Main {
             Server server = new Server(8080, service);
 
             server.start();
-
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }

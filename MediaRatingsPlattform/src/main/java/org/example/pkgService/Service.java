@@ -1,10 +1,12 @@
 package org.example.pkgService;
 
 import com.google.gson.Gson;
-import io.jsonwebtoken.security.Request;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.example.pkgDB.Database;
 import org.example.pkgMisc.MediaType;
 import org.example.pkgObj.*;
+import org.example.pkgServer.pkgToken.JWTUtil;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -115,6 +117,7 @@ public class Service {
     public Map<String, Object> userLogin(String body) {
         Map<String, Object> result = new HashMap<>();
         List<User> userList = db.getUserList();
+        JWTUtil util = new JWTUtil();
 
         if (!body.equals("")) {
             JSONObject json = new JSONObject(body);
@@ -129,8 +132,25 @@ public class Service {
                 }
             }
             if (res) {
-                result.put("response", user.toJson());
-                result.put("statusCode", 200);
+                if(!checkForToken(user.getId())) {
+                    String token = util.generateToken(user.getId().toString(), user.getUsername());
+                    db.addToken(token);
+
+                    JsonObject obj = JsonParser.parseString(user.toJson()).getAsJsonObject();
+                    obj.addProperty("token", token);
+
+                    result.put("response", gson.toJson(obj) + "\n");
+                    result.put("statusCode", 200);
+                } else {
+                    String token = db.getToken(user.getId());
+
+                    JsonObject obj = JsonParser.parseString(user.toJson()).getAsJsonObject();
+                    obj.addProperty("token", token);
+
+                    result.put("response", gson.toJson(obj) + gson.toJson(token, String.class));
+                    result.put("statusCode", 200);
+                }
+
             } else  {
                 result.put("response", "ERROR: Not found");
                 result.put("statusCode", 404);
@@ -150,7 +170,7 @@ public class Service {
             User user = new User(username, password);
             if (db.addUser(user))  {
                 result.put("response", user.toJson());
-                result.put("statusCode", 200);
+                result.put("statusCode", 201);
             } else {
                 result.put("response", "ERROR: Already in use");
                 result.put("statusCode", 409);
@@ -352,7 +372,7 @@ public class Service {
             if (!isInside) {
                 db.addMedia(newMedia);
                 result.put("response", newMedia.toJson());
-                result.put("statusCode", 200);
+                result.put("statusCode", 201);
             } else {
                 result.put("response", "ERROR: Already exists");
                 result.put("statusCode", 409);
@@ -433,7 +453,7 @@ public class Service {
                 if (media.getId().equals(uuid)) {
                     iterator.remove(); // Safe
                     result.put("response", "Media Deleted");
-                    result.put("statusCode", 200);
+                    result.put("statusCode", 204);
                     break;
                 }
             }
@@ -459,7 +479,7 @@ public class Service {
 
             db.addRating(ratingToAdd);
             result.put("response", "Added Rating");
-            result.put("statusCode", 200);
+            result.put("statusCode", 201);
         } catch (Exception e) {
             result.put("response", "ERROR: Bad Request");
             result.put("statusCode", 400);
@@ -769,4 +789,27 @@ public class Service {
         return result;
     }
 
+    public boolean checkForToken(UUID uuid) {
+        boolean ret = false;
+        JWTUtil jwtUtil = new JWTUtil();
+        List<String> tokenList = db.getTokenList();
+
+        Iterator<String> iterator = tokenList.iterator();
+        for (Iterator<String> it = iterator; it.hasNext(); ) {
+            String token = it.next();
+
+            if (jwtUtil.getUserIdFromToken(token).equals(uuid.toString())) {
+                if (jwtUtil.isTokenExpired(token)) {
+                    ret = false;
+                    db.removeToken(token);
+                } else {
+                    ret = true;
+                }
+            } else {
+                ret = false;
+            }
+        }
+
+        return ret;
+    }
 }
