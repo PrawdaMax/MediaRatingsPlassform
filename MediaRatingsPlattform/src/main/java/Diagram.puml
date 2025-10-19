@@ -1,0 +1,70 @@
+@startuml
+class User {
+    - id: int
+    - username : String
+    - passwordHash : String
+    - profileStats : ProfileStats
+    --
+    + register()
+    + login()
+    + editProfile()
+    + getFavorites()
+    + getRatings()
+    + addFavorite(MediaEntry)
+}
+
+class ProfileStats {
+    - totalRatings : int
+    - averageScore : double
+    - favoriteGenre : List<String>
+}
+
+class MediaEntry {
+    - id : int
+    - title : String
+    - description : String
+    - type : MediaType
+    - releaseYear : int
+    - genres : List<String>
+    - ageRestriction : int
+    - createdBy : User
+    --
+    + addRating(Rating)
+    + getAverageScore() : double
+}
+
+enum MediaType {
+    movie
+    series
+    game
+}
+
+class Rating {
+    - id : int
+    - stars : int
+    - comment : String
+    - timestamp : DateTime
+    - confirmed : boolean
+    - userId : User.id
+    - MediaId : Media.id
+    --
+    + edit()
+    + delete()
+    + confirm()
+}
+
+class Like {
+    - id : int
+    - user : User
+    - rating : Rating
+}
+
+' Relationships
+User "1" -- "0.*" MediaEntry : creates >
+User "1" -- "0.*" Rating : writes >
+User "1" -- "0.*" Like : gives >
+User "0.*" -- "0.*" MediaEntry : favorites >
+MediaEntry "1" -- "0.*" Rating : has >
+Rating "1" -- "0.*" Like : receives >
+User "1" -- "1" ProfileStats : has >
+@enduml
