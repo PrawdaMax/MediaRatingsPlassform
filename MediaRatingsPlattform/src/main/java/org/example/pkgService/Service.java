@@ -451,7 +451,7 @@ public class Service {
             while (iterator.hasNext()) {
                 Media media = iterator.next();
                 if (media.getId().equals(uuid)) {
-                    iterator.remove(); // Safe
+                    iterator.remove();
                     result.put("response", "Media Deleted");
                     result.put("statusCode", 204);
                     break;
@@ -459,7 +459,6 @@ public class Service {
             }
         } catch (Exception e) {
             result.put("response", "ERROR: Bad Request");
-            result.put("statusCode", 400);
         }
 
         return result;

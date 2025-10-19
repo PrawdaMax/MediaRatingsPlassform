@@ -22,8 +22,6 @@ public class User {
         this.favoriteGenres = new ArrayList<>();
     }
 
-    public User() {}
-
     public void addFavoriteGenre(String genre){
         this.favoriteGenres.add(genre);
     }
