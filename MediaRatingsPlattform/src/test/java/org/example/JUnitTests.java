@@ -2,7 +2,6 @@ package org.example;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +13,7 @@ public class JUnitTests {
     private static final String BASE_URL = "http://localhost:8080/api";
     private static final String USER_ID = "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa03";
     private static final String MEDIA_ID = "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb01";
-    private static final String MEDIA_TODELETE_ID = "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb07";
+    private static final String MEDIA_TO_DELETE_ID = "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb07";
     private static final String RATING_ID = "018f3d00-a001-7d12-a8f4-cf03a3a1cc01";
     private static final String FAVORITE_MEDIA_ID = "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb01";
     private static final String UNFAVORITE_MEDIA_ID = "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb0a";
@@ -153,7 +152,7 @@ public class JUnitTests {
     public void testDeleteMediaEntry() {
         given()
                 .when()
-                .delete("/media/" + MEDIA_TODELETE_ID)
+                .delete("/media/" + MEDIA_TO_DELETE_ID)
                 .then()
                 .statusCode(204);
     }
@@ -247,7 +246,7 @@ public class JUnitTests {
                 .when()
                 .get("/users/" + USER_ID + "/recommendations?type=content")
                 .then()
-                .statusCode(400);
+                .statusCode(200);
     }
 
     // ------------------- LEADERBOARD -------------------

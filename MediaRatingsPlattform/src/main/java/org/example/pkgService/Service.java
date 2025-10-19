@@ -737,8 +737,43 @@ public class Service {
                     result.put("statusCode", 200);
 
                 } else if (queryParams.get("type").equals("content")) {
-                    result.put("response", "ERROR: Not yet Implemented");
-                    result.put("statusCode", 400);
+
+                    User user = db.getUser(uuid);
+                    List<UUID> favMedia = user.getFavorites();
+                    List<Media> favoriteMedia = new ArrayList<>();
+                    List<String> genres = new ArrayList<>();
+
+                    for (Media media : mediaList) {
+                        if (favMedia.contains(media.getId())) {
+                            favoriteMedia.add(media);
+                        }
+                    }
+
+                    for (Media media : favoriteMedia) {
+                        genres.addAll(media.getGenres());
+                    }
+
+                    Set<String> set = new LinkedHashSet<>(genres);
+                    ArrayList<String> uniqueFavorites = new ArrayList<>(set);
+
+                    List<Media> matchingMedia = mediaList.stream()
+                            .filter(media -> !Collections.disjoint(media.getGenres(), uniqueFavorites))
+                            .sorted(Comparator.comparingInt((Media media) ->
+                                    (int) media.getGenres().stream()
+                                            .filter(uniqueFavorites::contains)
+                                            .count()
+                            ).reversed())
+                            .collect(Collectors.toList());
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("[\n");
+                    for (Media media : matchingMedia) {
+                        sb.append(media.toJson());
+                        sb.append(",\n");
+                    }
+                    sb.append("]");
+                    result.put("response", sb.toString());
+                    result.put("statusCode", 200);
                 }
             }
 

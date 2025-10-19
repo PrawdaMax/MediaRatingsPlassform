@@ -44,7 +44,7 @@ public class Database {
         this.tokenList = new ArrayList<>();
     }
 
-    public static class MediaLibrary {
+    public class MediaLibrary {
         public List<User> Users;
         public List<Media> Media;
         public List<Rating> Ratings;

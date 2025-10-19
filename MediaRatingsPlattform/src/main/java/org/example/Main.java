@@ -6,14 +6,6 @@ import org.example.pkgServer.Server;
 import org.example.pkgService.Service;
 import org.example.pkgUI.Cli;
 
-/*
-Get Recommendations by Content
-
-Code Cleanup
-
-Documentation
- */
-
 public class Main {
     public static void main(String[] args) {
         try  {
