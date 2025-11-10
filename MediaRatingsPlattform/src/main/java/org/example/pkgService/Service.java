@@ -278,6 +278,7 @@ public class Service {
                     for (String genre : genreList) {
                         if (genre.toLowerCase().equals(queryGenre)) {
                             genreMatch = true;
+                            break;
                         }
                     }
 
@@ -452,7 +453,8 @@ public class Service {
                 Media media = iterator.next();
                 if (media.getId().equals(uuid)) {
                     iterator.remove();
-                    result.put("response", "Media Deleted");
+                    db.deleteMedia(media.getId());
+                    result.put("response", media.toJson());
                     result.put("statusCode", 204);
                     break;
                 }
@@ -477,7 +479,7 @@ public class Service {
             Rating ratingToAdd = new Rating(value, comment, "2025", userid, uuid);
 
             db.addRating(ratingToAdd);
-            result.put("response", "Added Rating");
+            result.put("response", ratingToAdd.toJson());
             result.put("statusCode", 201);
         } catch (Exception e) {
             result.put("response", "ERROR: Bad Request");
@@ -606,12 +608,13 @@ public class Service {
             for (UUID favorite : user.getFavorites()) {
                 if (favorite.equals(uuid)) {
                     isInside = true;
+                    break;
                 }
             }
             if (!isInside) {
                 user.addFavorite(uuid);
 
-                result.put("response", "Marked as Favorite");
+                result.put("response", user.toJson());
                 result.put("statusCode", 200);
             } else {
                 result.put("response", "ERROR: Already Favorite");
@@ -641,12 +644,13 @@ public class Service {
             for (UUID favorite : user.getFavorites()) {
                 if (favorite.equals(uuid)) {
                     isInside = true;
+                    break;
                 }
             }
             if (isInside) {
                 user.deleteFavorite(uuid);
 
-                result.put("response", "Unmarked as Favorite");
+                result.put("response", user.toJson());
                 result.put("statusCode", 200);
             } else {
                 result.put("response", "ERROR: No Favorite");

@@ -21,7 +21,7 @@ public class Database {
     private List<Media> mediaList;
     private List<Rating> ratingList;
     private List<User> userList;
-    private List<Like> likesList;
+    private final List<Like> likesList;
     private List<String> tokenList;
 
     public Database() throws FileNotFoundException {

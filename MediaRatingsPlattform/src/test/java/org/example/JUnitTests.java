@@ -2,11 +2,13 @@ package org.example;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class JUnitTests {
 
@@ -23,94 +25,93 @@ public class JUnitTests {
         RestAssured.baseURI = BASE_URL;
     }
 
+    private void printResponse(String title, Response response) {
+        System.out.println("\n----- " + title + " -----");
+        System.out.println("Status Code: " + response.statusCode());
+        System.out.println("Status Line: " + response.statusLine());
+        System.out.println("Body:\n" + response.getBody().asString());
+    }
+
     // ------------------- AUTH -------------------
     @Test
     public void testRegisterUser() {
-        String reqBody = given()
+        Response response = given()
                 .contentType(ContentType.JSON)
                 .body("{\"username\":\"user1\",\"password\":\"pass123\"}")
                 .when()
                 .post("/users/register")
                 .then()
-                .statusCode(201)
                 .extract()
-                .asString();
+                .response();
 
-        System.out.println("\n-----RegisterUser");
-        System.out.println(reqBody);
+        printResponse("RegisterUser", response);
     }
 
     @Test
     public void testLoginUser() {
-        String reqBody = given()
+        Response response = given()
                 .contentType(ContentType.JSON)
                 .body("{\"username\":\"bob\",\"password\":\"securepass\"}")
                 .when()
                 .post("/users/login")
                 .then()
-                .statusCode(200)
                 .extract()
-                .asString();
+                .response();
 
-        System.out.println("\n-----LoginUser");
-        System.out.println(reqBody);
+        printResponse("LoginUser", response);
+        assertEquals(200, response.statusCode(), "Expected HTTP 200 OK");
+        assertTrue(response.getBody().asString().contains("token"), "Login should return a token");
     }
 
     // ------------------- USER -------------------
     @Test
     public void testGetProfile() {
-        String reqBody = given()
+        Response response = given()
                 .when()
                 .get("/users/" + USER_ID + "/profile")
                 .then()
-                .statusCode(200)
                 .extract()
-                .asString();
+                .response();
 
-        System.out.println("\n-----getUserProfile");
-        System.out.println(reqBody);
+        printResponse("GetUserProfile", response);
     }
 
     @Test
     public void testUpdateProfile() {
-        String reqBody = given()
+        Response response = given()
                 .contentType(ContentType.JSON)
                 .body("{\"username\":\"updatedCarol\",\"password\":\"12345\"}")
                 .when()
                 .put("/users/" + USER_ID + "/profile")
                 .then()
-                .statusCode(200)
                 .extract()
-                .asString();
+                .response();
 
-        System.out.println("\n-----updateUserProfile");
-        System.out.println(reqBody);
+        printResponse("UpdateUserProfile", response);
     }
 
     @Test
     public void testGetRatingHistory() {
-        String reqBody = given()
+        Response response = given()
                 .when()
                 .get("/users/" + USER_ID + "/ratings")
                 .then()
                 .extract()
-                .asString();
+                .response();
 
-        System.out.println("\n-----getRatingHistory");
-        System.out.println(reqBody);
+        printResponse("GetRatingHistory", response);
     }
 
     @Test
     public void testGetFavorites() {
-        String reqBody = given()
+        Response response = given()
                 .when()
                 .get("/users/" + USER_ID + "/favorites")
                 .then()
                 .extract()
-                .asString();
+                .response();
 
-        System.out.println("\n-----getFavorites");
-        System.out.println(reqBody);
+        printResponse("GetFavorites", response);
     }
 
     // ------------------- MEDIA -------------------
@@ -127,18 +128,16 @@ public class JUnitTests {
             }
         """;
 
-        String reqBody = given()
+        Response response = given()
                 .contentType(ContentType.JSON)
                 .body(requestBody)
                 .when()
                 .post("/media")
                 .then()
-                .statusCode(201)
                 .extract()
-                .asString();
+                .response();
 
-        System.out.println("\n-----createMediaEntry");
-        System.out.println(reqBody);
+        printResponse("CreateMediaEntry", response);
     }
 
     @Test
@@ -149,53 +148,45 @@ public class JUnitTests {
                 "description": "Updated description",
                 "mediaType": "movie",
                 "releaseYear": 2010,
-                "genres": [
-                  "sci-fi",
-                  "action"
-                ],
+                "genres": ["sci-fi", "action"],
                 "ageRestriction": 16
             }
         """;
 
-        String reqBody = given()
+        Response response = given()
                 .contentType(ContentType.JSON)
                 .body(requestBody)
                 .when()
                 .put("/media/" + MEDIA_ID)
                 .then()
-                .statusCode(200)
                 .extract()
-                .asString();
+                .response();
 
-        System.out.println("\n-----updateRatingHistory");
-        System.out.println(reqBody);
+        printResponse("UpdateMediaEntry", response);
     }
 
     @Test
     public void testGetMediaById() {
-        String reqBody = given()
+        Response response = given()
                 .when()
                 .get("/media/" + MEDIA_ID)
                 .then()
-                .statusCode(200)
                 .extract()
-                .asString();
+                .response();
 
-        System.out.println("\n-----getMediaById");
-        System.out.println(reqBody);
+        printResponse("GetMediaById", response);
     }
 
     @Test
     public void testDeleteMediaEntry() {
-        String reqBody = given()
+        Response response = given()
                 .when()
                 .delete("/media/" + MEDIA_TO_DELETE_ID)
                 .then()
                 .extract()
-                .asString();
+                .response();
 
-        System.out.println("\n-----deleteMediaEntry");
-        System.out.println(reqBody);
+        printResponse("DeleteMediaEntry", response);
     }
 
     // ------------------- RATING -------------------
@@ -209,17 +200,16 @@ public class JUnitTests {
             }
         """.formatted(USER_ID);
 
-        String reqBody = given()
+        Response response = given()
                 .contentType(ContentType.JSON)
                 .body(requestBody)
                 .when()
                 .post("/media/" + MEDIA_ID + "/rate")
                 .then()
                 .extract()
-                .asString();
+                .response();
 
-        System.out.println("\n-----rateMedia");
-        System.out.println(reqBody);
+        printResponse("RateMedia", response);
     }
 
     @Test
@@ -231,104 +221,98 @@ public class JUnitTests {
             }
         """;
 
-        String reqBody = given()
+        Response response = given()
                 .contentType(ContentType.JSON)
                 .body(requestBody)
                 .when()
                 .put("/ratings/" + RATING_ID)
                 .then()
-                .statusCode(200)
                 .extract()
-                .asString();
+                .response();
 
-        System.out.println("\n-----updateRating");
-        System.out.println(reqBody);
+        printResponse("UpdateRating", response);
     }
 
     @Test
     public void testConfirmRatingComment() {
-        String reqBody = given()
+        Response response = given()
                 .when()
                 .post("/ratings/" + RATING_ID + "/confirm")
                 .then()
                 .extract()
-                .asString();
+                .response();
 
-        System.out.println("\n-----confirmComment");
-        System.out.println(reqBody);
+        printResponse("ConfirmRatingComment", response);
     }
 
     // ------------------- FAVORITES -------------------
     @Test
     public void testMarkAsFavorite() {
         String body = "{ \"user\": \"" + USER_ID + "\" }";
-        String reqBody = given()
+
+        Response response = given()
                 .contentType(ContentType.JSON)
                 .body(body)
                 .when()
                 .post("/media/" + FAVORITE_MEDIA_ID + "/favorite")
                 .then()
                 .extract()
-                .asString();
+                .response();
 
-        System.out.println("\n-----markAsFavorite");
-        System.out.println(reqBody);
+        printResponse("MarkAsFavorite", response);
     }
 
     @Test
     public void testUnmarkAsFavorite() {
         String body = "{ \"user\": \"" + USER_ID + "\" }";
-        String reqBody = given()
+
+        Response response = given()
                 .contentType(ContentType.JSON)
                 .body(body)
                 .when()
                 .delete("/media/" + UNFAVORITE_MEDIA_ID + "/favorite")
                 .then()
                 .extract()
-                .asString();
+                .response();
 
-        System.out.println("\n-----unmarkAsFavorite");
-        System.out.println(reqBody);
+        printResponse("UnmarkAsFavorite", response);
     }
 
     // ------------------- RECOMMENDATION -------------------
     @Test
     public void testGetRecommendationsByGenre() {
-        String reqBody = given()
+        Response response = given()
                 .when()
                 .get("/users/" + USER_ID + "/recommendations?type=genre")
                 .then()
                 .extract()
-                .asString();
+                .response();
 
-        System.out.println("\n-----getRecommendationsByGenre");
-        System.out.println(reqBody);
+        printResponse("GetRecommendationsByGenre", response);
     }
 
     @Test
     public void testGetRecommendationsByContent() {
-        String reqBody = given()
+        Response response = given()
                 .when()
                 .get("/users/" + USER_ID + "/recommendations?type=content")
                 .then()
                 .extract()
-                .asString();
+                .response();
 
-        System.out.println("\n-----getRecommendationsByContent");
-        System.out.println(reqBody);
+        printResponse("GetRecommendationsByContent", response);
     }
 
     // ------------------- LEADERBOARD -------------------
     @Test
     public void testGetLeaderboard() {
-        String reqBody = given()
+        Response response = given()
                 .when()
                 .get("/leaderboard")
                 .then()
                 .extract()
-                .asString();
+                .response();
 
-        System.out.println("\n-----getLeaderboard");
-        System.out.println(reqBody);
+        printResponse("GetLeaderboard", response);
     }
 }

@@ -3,16 +3,17 @@ package org.example.pkgServer;
 import com.sun.net.httpserver.HttpServer;
 import org.example.pkgServer.pkgHandlers.*;
 import org.example.pkgService.Service;
+import org.example.pkgUI.AppLogger;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-
-//Task1 (Alles in der start function)
+import java.util.logging.Logger;
 
 public class Server {
     private final int port;
     private final Service service;
     private HttpServer httpServer;
+    private final Logger log = (Logger) AppLogger.getLogger(Server.class);
 
     public Server(int port, Service service) {
         this.port = port;
@@ -29,10 +30,13 @@ public class Server {
 
     private void registerContexts(HttpServer server) {
         server.createContext("/", new RootHandler());
-        server.createContext("/api", new ApiHandler(service));
+        server.createContext("/api/users", new UserHandler(service));
+        server.createContext("/api/media", new MediaHandler(service));
+        server.createContext("/api/ratings", new RatingHandler(service));
+        server.createContext("/api/leaderboard", new LeaderboardHandler(service));
     }
 
     private void logStartup() {
-        System.out.println("Server started on port " + port);
+        log.info("Server started on port " + port);
     }
 }

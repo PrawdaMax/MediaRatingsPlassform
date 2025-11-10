@@ -11,8 +11,8 @@ public class User {
     private UUID id;
     private String username;
     private String password;
-    private List<UUID> favorites;
-    private List<String> favoriteGenres;
+    private final List<UUID> favorites;
+    private final List<String> favoriteGenres;
 
     public User (String username, String password) {
         this.id = UuidCreator.getTimeOrderedEpoch();
