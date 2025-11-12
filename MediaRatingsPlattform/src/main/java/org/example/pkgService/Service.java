@@ -8,6 +8,7 @@ import org.example.pkgMisc.MediaType;
 import org.example.pkgObj.*;
 import org.example.pkgServer.pkgToken.JWTUtil;
 import org.json.JSONObject;
+import org.w3c.dom.stylesheets.MediaList;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -78,7 +79,16 @@ public class Service {
                     }
                 }
             } else {
-                result.put("response",db.getMediaData());
+                StringBuilder sb = new StringBuilder();
+
+                sb.append("[\n");
+                for (Media media : mediaList) {
+                    sb.append(media.toJson());
+                    sb.append(",\n");
+                }
+                sb.append("]");
+
+                result.put("response", sb.toString());
                 result.put("statusCode", 200);
             }
         } else {
@@ -103,7 +113,16 @@ public class Service {
                     }
                 }
             } else {
-                result.put("response", db.getUserData());
+
+                StringBuilder sb = new StringBuilder();
+
+                sb.append("[\n");
+                    for (User user : userList) {
+                        sb.append(user.toJson());
+                        sb.append(",\n");
+                    }
+                    sb.append("]");
+                result.put("response", sb.toString());
                 result.put("statusCode", 200);
             }
         } else {
@@ -134,7 +153,7 @@ public class Service {
             if (res) {
                 if(!checkForToken(user.getId())) {
                     String token = util.generateToken(user.getId().toString(), user.getUsername());
-                    db.addToken(token);
+                    db.addToken(token, user.getId());
 
                     JsonObject obj = JsonParser.parseString(user.toJson()).getAsJsonObject();
                     obj.addProperty("token", token);

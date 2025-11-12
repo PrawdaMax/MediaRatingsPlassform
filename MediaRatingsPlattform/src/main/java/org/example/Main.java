@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.pkgDB.Database;
+import org.example.pkgDB.TestDataLoader;
 import org.example.pkgServer.Server;
 import org.example.pkgService.Service;
 
@@ -22,19 +23,17 @@ Controller ist context -> Pfad
 controller unterscheidet zwischen methoden und weist zu
 
 Controller getMediaEntry
-
-Router -> Handler -> Controller
---------------------------
-Datenbank
 */
 
 public class Main {
     public static void main(String[] args) {
         try  {
             Database database = new Database();
+            TestDataLoader loader = new TestDataLoader(database);
+            loader.loadFromJson(TestDataLoader.class.getClassLoader().getResource("TestData.json").getPath());
+
             Service service = new Service(database);
             Server server = new Server(8080, service);
-
             server.start();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());

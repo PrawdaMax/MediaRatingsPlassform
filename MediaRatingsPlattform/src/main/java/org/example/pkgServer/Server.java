@@ -13,7 +13,7 @@ public class Server {
     private final int port;
     private final Service service;
     private HttpServer httpServer;
-    private final Logger log = (Logger) AppLogger.getLogger(Server.class);
+    //private final Logger log = AppLogger.getLogger(Server.class);
 
     public Server(int port, Service service) {
         this.port = port;
@@ -37,6 +37,7 @@ public class Server {
     }
 
     private void logStartup() {
-        log.info("Server started on port " + port);
+        System.out.println("Starting Server on port " + port);
+        //log.info("Server started on port " + port);
     }
 }

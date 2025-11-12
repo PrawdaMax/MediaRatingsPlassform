@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import java.util.UUID;
 
 public class Like {
-    private final UUID id;
+    private UUID id;
     private UUID userId;
     private UUID ratingId;
     private String timestamp;
@@ -19,6 +19,10 @@ public class Like {
 
     public UUID getId() {
         return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String toJson() {

@@ -1,146 +1,87 @@
 {
   "Users": [
-    {
-      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa01",
-      "username": "alice",
-      "password": "password123",
-      "favorites": [
-        "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb02",
-        "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03"
-      ],
-      "favoriteGenres": ["Drama", "Sci-Fi"]
-    },
-    {
-      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa02",
-      "username": "bob",
-      "password": "securepass",
-      "favorites": [
-        "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03",
-        "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb01"
-      ],
-      "favoriteGenres": ["Action", "Comedy"]
-    },
-    {
-      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa03",
-      "username": "carol",
-      "password": "qwerty",
-      "favorites": [
-        "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03",
-        "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb0a"
-      ],
-      "favoriteGenres": ["Horror", "Thriller"]
-    },
-    {
-      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa04",
-      "username": "dave",
-      "password": "letmein",
-      "favorites": [
-        "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03",
-        "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb04"
-      ],
-      "favoriteGenres": ["Documentary", "Drama"]
-    },
-    {
-      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa05",
-      "username": "eve",
-      "password": "passw0rd",
-      "favorites": [
-        "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb01"
-      ],
-      "favoriteGenres": ["Romance", "Fantasy"]
-    }
+    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa01", "username": "alice", "password": "password123" },
+    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa02", "username": "bob", "password": "securepass" },
+    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa03", "username": "carol", "password": "qwerty" },
+    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa04", "username": "dave", "password": "letmein" },
+    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa05", "username": "eve", "password": "passw0rd" }
   ],
+
   "Media": [
-    {
-      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb01",
-      "title": "Inception",
-      "description": "A mind-bending thriller about dream invasion.",
-      "mediaType": "movie",
-      "year": 2010,
-      "genres": ["Sci-Fi", "Thriller"],
-      "ageRestriction": 13
-    },
-    {
-      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb02",
-      "title": "Breaking Bad",
-      "description": "A chemistry teacher turns to drug dealing.",
-      "mediaType": "series",
-      "year": 2008,
-      "genres": ["Crime", "Drama"],
-      "ageRestriction": 18
-    },
-    {
-      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03",
-      "title": "The Witcher 3",
-      "description": "A fantasy RPG with rich storytelling.",
-      "mediaType": "game",
-      "year": 2015,
-      "genres": ["RPG", "Fantasy"],
-      "ageRestriction": 18
-    },
-    {
-      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb04",
-      "title": "The Office",
-      "description": "A mockumentary-style sitcom.",
-      "mediaType": "series",
-      "year": 2005,
-      "genres": ["Comedy"],
-      "ageRestriction": 12
-    },
-    {
-      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb05",
-      "title": "The Matrix",
-      "description": "A hacker discovers reality is a simulation.",
-      "mediaType": "movie",
-      "year": 1999,
-      "genres": ["Action", "Sci-Fi"],
-      "ageRestriction": 16
-    },
-    {
-      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb06",
-      "title": "God of War",
-      "description": "A Spartan warrior battles gods and monsters.",
-      "mediaType": "game",
-      "year": 2018,
-      "genres": ["Action", "Adventure"],
-      "ageRestriction": 18
-    },
-    {
-      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb07",
-      "title": "Friends",
-      "description": "Six friends navigate life in New York.",
-      "mediaType": "series",
-      "year": 1994,
-      "genres": ["Comedy", "Romance"],
-      "ageRestriction": 12
-    },
-    {
-      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb08",
-      "title": "Interstellar",
-      "description": "A journey through space and time.",
-      "mediaType": "movie",
-      "year": 2014,
-      "genres": ["Sci-Fi", "Drama"],
-      "ageRestriction": 13
-    },
-    {
-      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb09",
-      "title": "Cyberpunk 2077",
-      "description": "A futuristic open-world RPG.",
-      "mediaType": "game",
-      "year": 2020,
-      "genres": ["RPG", "Sci-Fi"],
-      "ageRestriction": 18
-    },
-    {
-      "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb0a",
-      "title": "The Crown",
-      "description": "A biographical story about the reign of Queen Elizabeth II.",
-      "mediaType": "series",
-      "year": 2016,
-      "genres": ["Drama", "History"],
-      "ageRestriction": 15
-    }
+    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb01", "title": "Inception", "description": "A mind-bending thriller about dream invasion.", "mediaType": "movie", "year": 2010, "age_restriction": 13 },
+    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb02", "title": "Breaking Bad", "description": "A chemistry teacher turns to drug dealing.", "mediaType": "series", "year": 2008, "age_restriction": 18 },
+    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03", "title": "The Witcher 3", "description": "A fantasy RPG with rich storytelling.", "mediaType": "game", "year": 2015, "age_restriction": 18 },
+    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb04", "title": "The Office", "description": "A mockumentary-style sitcom.", "mediaType": "series", "year": 2005, "age_restriction": 12 },
+    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb05", "title": "The Matrix", "description": "A hacker discovers reality is a simulation.", "mediaType": "movie", "year": 1999, "age_restriction": 16 },
+    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb06", "title": "God of War", "description": "A Spartan warrior battles gods and monsters.", "mediaType": "game", "year": 2018, "age_restriction": 18 },
+    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb07", "title": "Friends", "description": "Six friends navigate life in New York.", "mediaType": "series", "year": 1994, "age_restriction": 12 },
+    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb08", "title": "Interstellar", "description": "A journey through space and time.", "mediaType": "movie", "year": 2014, "age_restriction": 13 },
+    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb09", "title": "Cyberpunk 2077", "description": "A futuristic open-world RPG.", "mediaType": "game", "year": 2020, "age_restriction": 18 },
+    { "id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb0a", "title": "The Crown", "description": "A biographical story about the reign of Queen Elizabeth II.", "mediaType": "series", "year": 2016, "age_restriction": 15 }
+  ],
+
+  "MediaGenres": [
+    { "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb01", "genre": "Sci-Fi" },
+    { "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb01", "genre": "Thriller" },
+
+    { "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb02", "genre": "Crime" },
+    { "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb02", "genre": "Drama" },
+
+    { "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03", "genre": "RPG" },
+    { "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03", "genre": "Fantasy" },
+
+    { "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb04", "genre": "Comedy" },
+
+    { "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb05", "genre": "Action" },
+    { "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb05", "genre": "Sci-Fi" },
+
+    { "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb06", "genre": "Action" },
+    { "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb06", "genre": "Adventure" },
+
+    { "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb07", "genre": "Comedy" },
+    { "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb07", "genre": "Romance" },
+
+    { "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb08", "genre": "Sci-Fi" },
+    { "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb08", "genre": "Drama" },
+
+    { "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb09", "genre": "RPG" },
+    { "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb09", "genre": "Sci-Fi" },
+
+    { "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb0a", "genre": "Drama" },
+    { "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb0a", "genre": "History" }
+  ],
+
+  "UserFavorites": [
+    { "user_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa01", "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb02" },
+    { "user_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa01", "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03" },
+
+    { "user_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa02", "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03" },
+    { "user_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa02", "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb01" },
+
+    { "user_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa03", "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03" },
+    { "user_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa03", "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb0a" },
+
+    { "user_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa04", "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb03" },
+    { "user_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa04", "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb04" },
+
+    { "user_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa05", "media_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb01" }
+  ],
+
+  "UserFavoriteGenres": [
+    { "user_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa01", "genre": "Drama" },
+    { "user_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa01", "genre": "Sci-Fi" },
+
+    { "user_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa02", "genre": "Action" },
+    { "user_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa02", "genre": "Comedy" },
+
+    { "user_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa03", "genre": "Horror" },
+    { "user_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa03", "genre": "Thriller" },
+
+    { "user_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa04", "genre": "Documentary" },
+    { "user_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa04", "genre": "Drama" },
+
+    { "user_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa05", "genre": "Romance" },
+    { "user_id": "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa05", "genre": "Fantasy" }
   ],
   "Ratings": [
     {

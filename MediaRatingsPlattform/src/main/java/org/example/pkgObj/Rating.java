@@ -21,10 +21,19 @@ public class Rating {
         this.userId = userId;
         this.mediaId = mediaId;
         this.confirmed = false;
+        this.timestamp = timestamp;
     }
 
     public void confirm() {
         this.confirmed = true;
+    }
+
+    public boolean isConfirmed() {
+        return confirmed;
+    }
+
+    public void setConfirmed(boolean confirmed) {
+        this.confirmed = confirmed;
     }
 
     public UUID getId() {
