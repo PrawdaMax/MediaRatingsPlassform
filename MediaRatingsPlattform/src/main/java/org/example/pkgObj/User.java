@@ -22,22 +22,6 @@ public class User {
         this.favoriteGenres = new ArrayList<>();
     }
 
-    public User (UUID id, String username, String password) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.favorites = new ArrayList<>();
-        this.favoriteGenres = new ArrayList<>();
-    }
-
-    public void addFavoriteGenre(String genre){
-        this.favoriteGenres.add(genre);
-    }
-
-    public void removeFavoriteGenre(String genre){
-        this.favoriteGenres.remove(genre);
-    }
-
     public List<String> getFavoriteGenres(){
         return this.favoriteGenres;
     }

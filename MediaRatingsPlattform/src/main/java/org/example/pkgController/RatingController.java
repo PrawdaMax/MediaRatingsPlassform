@@ -1,13 +1,13 @@
 package org.example.pkgController;
 
-import org.example.pkgService.Service;
+import org.example.pkgService.RatingService;
 import java.util.Map;
 import java.util.UUID;
 
 public class RatingController {
-    private final Service service;
+    private final RatingService service;
 
-    public RatingController(Service service) {
+    public RatingController(RatingService service) {
         this.service = service;
     }
 

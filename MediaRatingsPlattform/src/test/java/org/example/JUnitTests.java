@@ -1,318 +1,336 @@
 package org.example;
 
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
-import org.junit.jupiter.api.BeforeAll;
+import org.example.pkgMisc.MediaType;
+import org.example.pkgObj.Media;
+import org.example.pkgObj.Rating;
+import org.example.pkgObj.User;
+import org.example.pkgServer.pkgRepositories.MediaRepository;
+import org.example.pkgServer.pkgRepositories.RatingRepository;
+import org.example.pkgServer.pkgRepositories.TokenRepository;
+import org.example.pkgServer.pkgRepositories.UserRepository;
+import org.example.pkgService.MediaService;
+import org.example.pkgService.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 public class JUnitTests {
 
-    private static final String BASE_URL = "http://localhost:8080/api";
-    private static final String USER_ID = "018f3c60-8cd5-7c92-a7e4-cf03a3a1aa03";
-    private static final String MEDIA_ID = "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb01";
-    private static final String MEDIA_TO_DELETE_ID = "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb07";
-    private static final String RATING_ID = "018f3d00-a001-7d12-a8f4-cf03a3a1cc01";
-    private static final String FAVORITE_MEDIA_ID = "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb01";
-    private static final String UNFAVORITE_MEDIA_ID = "018f3c60-8cd5-7c92-a7e4-cf03a3a1bb0a";
+    private UserService userService;
+    private MediaService mediaService;
 
-    @BeforeAll
-    public static void setup() {
-        RestAssured.baseURI = BASE_URL;
+    @Mock
+    private UserRepository userRepo;
+    @Mock
+    private TokenRepository tokenRepo;
+    @Mock
+    private RatingRepository ratingRepo;
+    @Mock
+    private MediaRepository mediaRepo;
+    
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        userService = new UserService(userRepo, tokenRepo, ratingRepo, mediaRepo);
+        mediaService = new MediaService(mediaRepo, userRepo, ratingRepo);
     }
 
-    private void printResponse(String title, Response response) {
-        System.out.println("\n----- " + title + " -----");
-        System.out.println("Status Code: " + response.statusCode());
-        System.out.println("Status Line: " + response.statusLine());
-        System.out.println("Body:\n" + response.getBody().asString());
-    }
-
-    // ------------------- AUTH -------------------
-    @Test
-    public void testRegisterUser() {
-        Response response = given()
-                .contentType(ContentType.JSON)
-                .body("{\"username\":\"user1\",\"password\":\"pass123\"}")
-                .when()
-                .post("/users/register")
-                .then()
-                .extract()
-                .response();
-
-        printResponse("RegisterUser", response);
-    }
+    // --- UserService Tests ---
 
     @Test
-    public void testLoginUser() {
-        Response response = given()
-                .contentType(ContentType.JSON)
-                .body("{\"username\":\"bob\",\"password\":\"securepass\"}")
-                .when()
-                .post("/users/login")
-                .then()
-                .extract()
-                .response();
+    public void testGetAllUsers() {
+        User user1 = new User("user1", "pass1");
+        User user2 = new User("user2", "pass2");
+        when(userRepo.getAll()).thenReturn(Arrays.asList(user1, user2));
 
-        printResponse("LoginUser", response);
-        assertEquals(200, response.statusCode(), "Expected HTTP 200 OK");
-        assertTrue(response.getBody().asString().contains("token"), "Login should return a token");
-    }
+        Map<String, Object> response = userService.getAllUsers();
 
-    // ------------------- USER -------------------
-    @Test
-    public void testGetProfile() {
-        Response response = given()
-                .when()
-                .get("/users/" + USER_ID + "/profile")
-                .then()
-                .extract()
-                .response();
-
-        printResponse("GetUserProfile", response);
+        assertEquals(200, response.get("statusCode"));
+        String body = (String) response.get("response");
+        assertTrue(body.contains("user1"));
+        assertTrue(body.contains("user2"));
     }
 
     @Test
-    public void testUpdateProfile() {
-        Response response = given()
-                .contentType(ContentType.JSON)
-                .body("{\"username\":\"updatedCarol\",\"password\":\"12345\"}")
-                .when()
-                .put("/users/" + USER_ID + "/profile")
-                .then()
-                .extract()
-                .response();
+    public void testRegisterUser_Success() {
+        String jsonBody = "{\"username\":\"newUser\", \"password\":\"newPass\"}";
+        when(userRepo.addUser(any(User.class))).thenReturn(true);
 
-        printResponse("UpdateUserProfile", response);
+        Map<String, Object> response = userService.registerUser(jsonBody);
+
+        assertEquals(201, response.get("statusCode"));
+        String body = (String) response.get("response");
+        assertTrue(body.contains("newUser"));
     }
 
     @Test
-    public void testGetRatingHistory() {
-        Response response = given()
-                .when()
-                .get("/users/" + USER_ID + "/ratings")
-                .then()
-                .extract()
-                .response();
+    public void testRegisterUser_Conflict() {
+        String jsonBody = "{\"username\":\"existingUser\", \"password\":\"pass\"}";
+        when(userRepo.addUser(any(User.class))).thenReturn(false);
 
-        printResponse("GetRatingHistory", response);
+        Map<String, Object> response = userService.registerUser(jsonBody);
+
+        assertEquals(409, response.get("statusCode"));
+        assertTrue(((String) response.get("response")).contains("Username already in use"));
     }
 
     @Test
-    public void testGetFavorites() {
-        Response response = given()
-                .when()
-                .get("/users/" + USER_ID + "/favorites")
-                .then()
-                .extract()
-                .response();
+    public void testLoginUser_Success() {
+        String jsonBody = "{\"username\":\"validUser\", \"password\":\"validPass\"}";
+        User user = new User("validUser", "validPass");
+        UUID userId = user.getId();
+        
+        when(userRepo.getAll()).thenReturn(Collections.singletonList(user));
+        when(tokenRepo.getTokenByUserId(userId)).thenReturn("validToken");
 
-        printResponse("GetFavorites", response);
-    }
+        Map<String, Object> response = userService.loginUser(jsonBody);
 
-    // ------------------- MEDIA -------------------
-    @Test
-    public void testCreateMediaEntry() {
-        String requestBody = """
-            {
-                "title": "Inglourious Basterds",
-                "description": "A group of Jewish-American soldiers plot to assassinate Nazi leaders in WWII.",
-                "mediaType": "movie",
-                "releaseYear": 2009,
-                "genres": ["war", "drama", "action"],
-                "ageRestriction": 18
-            }
-        """;
-
-        Response response = given()
-                .contentType(ContentType.JSON)
-                .body(requestBody)
-                .when()
-                .post("/media")
-                .then()
-                .extract()
-                .response();
-
-        printResponse("CreateMediaEntry", response);
+        assertEquals(200, response.get("statusCode"));
+        String body = (String) response.get("response");
+        assertTrue(body.contains("token"));
     }
 
     @Test
-    public void testUpdateMediaEntry() {
-        String requestBody = """
-            {
-                "title": "Inception Updated",
-                "description": "Updated description",
-                "mediaType": "movie",
-                "releaseYear": 2010,
-                "genres": ["sci-fi", "action"],
-                "ageRestriction": 16
-            }
-        """;
+    public void testLoginUser_InvalidCredentials() {
+        String jsonBody = "{\"username\":\"wrongUser\", \"password\":\"wrongPass\"}";
+        when(userRepo.getAll()).thenReturn(Collections.emptyList());
 
-        Response response = given()
-                .contentType(ContentType.JSON)
-                .body(requestBody)
-                .when()
-                .put("/media/" + MEDIA_ID)
-                .then()
-                .extract()
-                .response();
+        Map<String, Object> response = userService.loginUser(jsonBody);
 
-        printResponse("UpdateMediaEntry", response);
+        assertEquals(404, response.get("statusCode"));
+        assertTrue(((String) response.get("response")).contains("Invalid credentials"));
     }
 
     @Test
-    public void testGetMediaById() {
-        Response response = given()
-                .when()
-                .get("/media/" + MEDIA_ID)
-                .then()
-                .extract()
-                .response();
+    public void testGetUserProfile_Found() {
+        UUID userId = UUID.randomUUID();
+        User user = new User("testUser", "pass");
+        user.setId(userId);
+        when(userRepo.getById(userId)).thenReturn(user);
 
-        printResponse("GetMediaById", response);
+        Map<String, Object> response = userService.getUserProfile(userId);
+
+        assertEquals(200, response.get("statusCode"));
+        assertTrue(((String) response.get("response")).contains("testUser"));
     }
 
     @Test
-    public void testDeleteMediaEntry() {
-        Response response = given()
-                .when()
-                .delete("/media/" + MEDIA_TO_DELETE_ID)
-                .then()
-                .extract()
-                .response();
+    public void testGetUserProfile_NotFound() {
+        UUID userId = UUID.randomUUID();
+        when(userRepo.getById(userId)).thenReturn(null);
 
-        printResponse("DeleteMediaEntry", response);
-    }
+        Map<String, Object> response = userService.getUserProfile(userId);
 
-    // ------------------- RATING -------------------
-    @Test
-    public void testRateMedia() {
-        String requestBody = """
-            {
-                "stars": 5,
-                "comment": "Amazing movie!",
-                "user": "%s"
-            }
-        """.formatted(USER_ID);
-
-        Response response = given()
-                .contentType(ContentType.JSON)
-                .body(requestBody)
-                .when()
-                .post("/media/" + MEDIA_ID + "/rate")
-                .then()
-                .extract()
-                .response();
-
-        printResponse("RateMedia", response);
+        assertEquals(404, response.get("statusCode"));
+        assertTrue(((String) response.get("response")).contains("User not found"));
     }
 
     @Test
-    public void testUpdateRating() {
-        String requestBody = """
-            {
-                "stars": 4,
-                "comment": "Updated comment"
-            }
-        """;
+    public void testUpdateUserProfile_Success() {
+        UUID userId = UUID.randomUUID();
+        User user = new User("oldName", "oldPass");
+        user.setId(userId);
+        String jsonBody = "{\"username\":\"newName\", \"password\":\"newPass\"}";
 
-        Response response = given()
-                .contentType(ContentType.JSON)
-                .body(requestBody)
-                .when()
-                .put("/ratings/" + RATING_ID)
-                .then()
-                .extract()
-                .response();
+        when(userRepo.getById(userId)).thenReturn(user);
 
-        printResponse("UpdateRating", response);
+        Map<String, Object> response = userService.updateUserProfile(userId, jsonBody);
+
+        assertEquals(200, response.get("statusCode"));
+        String body = (String) response.get("response");
+        assertTrue(body.contains("newName"));
+        assertEquals("newName", user.getUsername());
     }
 
     @Test
-    public void testConfirmRatingComment() {
-        Response response = given()
-                .when()
-                .post("/ratings/" + RATING_ID + "/confirm")
-                .then()
-                .extract()
-                .response();
+    public void testUpdateUserProfile_NotFound() {
+        UUID userId = UUID.randomUUID();
+        String jsonBody = "{\"username\":\"newName\", \"password\":\"newPass\"}";
+        when(userRepo.getById(userId)).thenReturn(null);
 
-        printResponse("ConfirmRatingComment", response);
+        Map<String, Object> response = userService.updateUserProfile(userId, jsonBody);
+
+        assertEquals(404, response.get("statusCode"));
     }
 
-    // ------------------- FAVORITES -------------------
+    // --- MediaService Tests ---
     @Test
-    public void testMarkAsFavorite() {
-        String body = "{ \"user\": \"" + USER_ID + "\" }";
+    public void testGetAllMedia() {
+        List<String> genres = new ArrayList<>();
+        genres.add("Genre1");
+        genres.add("Genre2");
+        Media m1 = new Media("Movie1", "Desc1", MediaType.movie, 2020, genres, 7);
+        Media m2 = new Media("Movie2", "Desc2", MediaType.movie, 2012, genres, 12);
+        when(mediaRepo.getAll()).thenReturn(Arrays.asList(m1, m2));
 
-        Response response = given()
-                .contentType(ContentType.JSON)
-                .body(body)
-                .when()
-                .post("/media/" + FAVORITE_MEDIA_ID + "/favorite")
-                .then()
-                .extract()
-                .response();
+        Map<String, Object> response = mediaService.getAllMedia(Collections.emptyMap());
 
-        printResponse("MarkAsFavorite", response);
-    }
-
-    @Test
-    public void testUnmarkAsFavorite() {
-        String body = "{ \"user\": \"" + USER_ID + "\" }";
-
-        Response response = given()
-                .contentType(ContentType.JSON)
-                .body(body)
-                .when()
-                .delete("/media/" + UNFAVORITE_MEDIA_ID + "/favorite")
-                .then()
-                .extract()
-                .response();
-
-        printResponse("UnmarkAsFavorite", response);
-    }
-
-    // ------------------- RECOMMENDATION -------------------
-    @Test
-    public void testGetRecommendationsByGenre() {
-        Response response = given()
-                .when()
-                .get("/users/" + USER_ID + "/recommendations?type=genre")
-                .then()
-                .extract()
-                .response();
-
-        printResponse("GetRecommendationsByGenre", response);
+        assertEquals(200, response.get("statusCode"));
+        String body = (String) response.get("response");
+        assertTrue(body.contains("Movie1"));
+        assertTrue(body.contains("Movie2"));
     }
 
     @Test
-    public void testGetRecommendationsByContent() {
-        Response response = given()
-                .when()
-                .get("/users/" + USER_ID + "/recommendations?type=content")
-                .then()
-                .extract()
-                .response();
+    public void testPostMedia_Success() {
+        String jsonBody = "{\"title\":\"NewMovie\", \"type\":\"MOVIE\", \"releaseYear\":2022, \"description\":\"NewDesc\"}";
+        when(mediaRepo.getAll()).thenReturn(Collections.emptyList());
 
-        printResponse("GetRecommendationsByContent", response);
+        Map<String, Object> response = mediaService.postMedia(jsonBody);
+
+        assertEquals(201, response.get("statusCode"));
+        String body = (String) response.get("response");
+        assertTrue(body.contains("NewMovie"));
+        verify(mediaRepo, times(1)).save(any(Media.class));
     }
 
-    // ------------------- LEADERBOARD -------------------
     @Test
-    public void testGetLeaderboard() {
-        Response response = given()
-                .when()
-                .get("/leaderboard")
-                .then()
-                .extract()
-                .response();
+    public void testPostMedia_Conflict() {
+        String jsonBody = "{\"title\":\"Inception\", \"mediaType\":\"movie\", \"releaseYear\":2010, \"description\":\"A mind-bending thriller about dream invasion.\"}";
+        List<String> genres = new ArrayList<>();
+        genres.add("Genre1");
+        genres.add("Genre2");
+        Media existing = new Media("Inception", " A mind-bending thriller about dream invasion.", MediaType.movie, 2010, genres, 13);
+        when(mediaRepo.getAll()).thenReturn(Collections.singletonList(existing));
 
-        printResponse("GetLeaderboard", response);
+        Map<String, Object> response = mediaService.postMedia(jsonBody);
+
+        assertEquals(409, response.get("statusCode"));
+        assertTrue(((String) response.get("response")).contains("Media already exists"));
+    }
+
+    @Test
+    public void testGetMedia_Found() {
+        UUID mediaId = UUID.randomUUID();
+        List<String> genres = new ArrayList<>();
+        genres.add("Genre1");
+        genres.add("Genre2");
+        Media media = new Media("FoundMovie", "Desc", MediaType.movie, 2020, genres, 12);
+        media.setId(mediaId);
+        when(mediaRepo.getAll()).thenReturn(Collections.singletonList(media));
+
+        Map<String, Object> response = mediaService.getMedia(mediaId);
+
+        assertEquals(200, response.get("statusCode"));
+        assertTrue(((String) response.get("response")).contains("FoundMovie"));
+    }
+
+    @Test
+    public void testGetMedia_NotFound() {
+        UUID mediaId = UUID.randomUUID();
+        when(mediaRepo.getAll()).thenReturn(Collections.emptyList());
+
+        Map<String, Object> response = mediaService.getMedia(mediaId);
+
+        assertEquals(404, response.get("statusCode"));
+        assertTrue(((String) response.get("response")).contains("Not found"));
+    }
+
+    @Test
+    public void testUpdateMedia_Success() {
+        UUID mediaId = UUID.randomUUID();
+        List<String> genres = new ArrayList<>();
+        genres.add("Genre1");
+        genres.add("Genre2");
+        Media media = new Media("OldTitle", "Desc", MediaType.movie, 2020, genres, 18);
+        media.setId(mediaId);
+        String jsonBody = "{\"title\":\"NewTitle\"}";
+
+        when(mediaRepo.getAll()).thenReturn(Collections.singletonList(media));
+        when(mediaRepo.getById(mediaId)).thenReturn(media);
+        when(mediaRepo.updateMedia(anyMap(), eq(media))).thenAnswer(invocation -> {
+            media.setTitle("NewTitle");
+            return media;
+        });
+
+        Map<String, Object> response = mediaService.updateMedia(mediaId, jsonBody);
+
+        assertEquals(200, response.get("statusCode"));
+        assertTrue(((String) response.get("response")).contains("NewTitle"));
+    }
+
+    @Test
+    public void testDeleteMedia_Success() {
+        UUID mediaId = UUID.randomUUID();
+        List<String> genres = new ArrayList<>();
+        genres.add("Genre1");
+        genres.add("Genre2");
+        Media media = new Media("ToDelete", "Desc", MediaType.movie, 2012, genres, 4);
+        media.setId(mediaId);
+        when(mediaRepo.getAll()).thenReturn(Collections.singletonList(media));
+
+        Map<String, Object> response = mediaService.deleteMedia(mediaId);
+
+        assertEquals(204, response.get("statusCode"));
+        verify(mediaRepo, times(1)).deleteMedia(mediaId);
+    }
+
+    @Test
+    public void testAddRating_Success() {
+        UUID mediaId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+        String jsonBody = "{\"user\":\"" + userId + "\", \"stars\":5, \"comment\":\"Great!\"}";
+
+        Map<String, Object> response = mediaService.addRating(mediaId, jsonBody);
+
+        assertEquals(201, response.get("statusCode"));
+        verify(ratingRepo, times(1)).addRating(any(Rating.class));
+    }
+
+    @Test
+    public void testMarkAsFavorite_Success() {
+        UUID mediaId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+        User user = new User("user", "pass");
+        user.setId(userId);
+        String jsonBody = "{\"user\":\"" + userId + "\"}";
+
+        when(userRepo.getById(userId)).thenReturn(user);
+
+        Map<String, Object> response = mediaService.markAsFavorite(mediaId, jsonBody);
+
+        assertEquals(200, response.get("statusCode"));
+        assertTrue(user.getFavorites().contains(mediaId));
+    }
+
+    @Test
+    public void testMarkAsFavorite_AlreadyFavorite() {
+        UUID mediaId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+        User user = new User("user", "pass");
+        user.setId(userId);
+        user.addFavorite(mediaId);
+        String jsonBody = "{\"user\":\"" + userId + "\"}";
+
+        when(userRepo.getById(userId)).thenReturn(user);
+
+        Map<String, Object> response = mediaService.markAsFavorite(mediaId, jsonBody);
+
+        assertEquals(400, response.get("statusCode"));
+        assertTrue(((String) response.get("response")).contains("Already favorite"));
+    }
+
+    @Test
+    public void testUnmarkAsFavorite_Success() {
+        UUID mediaId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+        User user = new User("user", "pass");
+        user.setId(userId);
+        user.addFavorite(mediaId);
+        String jsonBody = "{\"user\":\"" + userId + "\"}";
+
+        when(userRepo.getById(userId)).thenReturn(user);
+
+        Map<String, Object> response = mediaService.unmarkAsFavorite(mediaId, jsonBody);
+
+        assertEquals(200, response.get("statusCode"));
+        assertFalse(user.getFavorites().contains(mediaId));
     }
 }

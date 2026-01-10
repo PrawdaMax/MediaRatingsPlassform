@@ -3,7 +3,7 @@ package org.example.pkgServer.pkgHandlers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.example.pkgController.UserController;
-import org.example.pkgService.Service;
+import org.example.pkgService.UserService;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -14,7 +14,7 @@ import java.util.UUID;
 public class UserHandler extends BaseHandler implements HttpHandler {
     private final UserController controller;
 
-    public UserHandler(Service service) {
+    public UserHandler(UserService service) {
         this.controller = new UserController(service);
     }
 
@@ -28,38 +28,36 @@ public class UserHandler extends BaseHandler implements HttpHandler {
 
         Map<String, Object> result = new HashMap<>();
 
-        if (path.equals("/api/users") && method.equals("GET")) {
-            result = controller.getAllUsers();
+        if (getJWTConfirm(exchange)) {
+            if (path.equals("/api/users") && method.equals("GET")) {
+                result = controller.getAllUsers();
 
-        } else if (path.equals("/api/users/register") && method.equals("POST")) {
-            result = controller.registerUser(body);
+            }  else if (path.matches("^/api/users/[0-9a-fA-F-]+/profile$")) {
+                UUID id = extractUUID(path);
+                switch (method) {
+                    case "GET" -> result = controller.getUserProfile(id);
+                    case "PUT" -> result = controller.updateUserProfile(id, body);
+                    default -> {
+                        result.put("response", "{\"error\":\"Method Not Allowed\"}");
+                        result.put("status", 405);
+                    }
+                }
+            } else if (path.matches("^/api/users/[0-9a-fA-F-]+/ratings$") && method.equals("GET")) {
+                result = controller.getUserRatings(extractUUID(path));
 
-        } else if (path.equals("/api/users/login") && method.equals("POST")) {
-            result = controller.loginUser(body);
+            } else if (path.matches("^/api/users/[0-9a-fA-F-]+/favorites$") && method.equals("GET")) {
+                result = controller.getUserFavorites(extractUUID(path));
 
-        } else if (path.matches("^/api/users/[0-9a-fA-F-]+/profile$")) {
-            UUID id = extractUUID(path);
-            if (method.equals("GET")) {
-                result = controller.getUserProfile(id);
-            } else if (method.equals("PUT")) {
-                result = controller.updateUserProfile(id, body);
+            } else if (path.matches("^/api/users/[0-9a-fA-F-]+/recommendations$") && method.equals("GET")) {
+                result = controller.getUserRecommendations(extractUUID(path), queryParams);
+
             } else {
-                result.put("response", "{\"error\":\"Method Not Allowed\"}");
-                result.put("status", 405);
+                result.put("response", "{\"error\":\"Not Found\"}");
+                result.put("statusCode", 404);
             }
-
-        } else if (path.matches("^/api/users/[0-9a-fA-F-]+/ratings$") && method.equals("GET")) {
-            result = controller.getUserRatings(extractUUID(path));
-
-        } else if (path.matches("^/api/users/[0-9a-fA-F-]+/favorites$") && method.equals("GET")) {
-            result = controller.getUserFavorites(extractUUID(path));
-
-        } else if (path.matches("^/api/users/[0-9a-fA-F-]+/recommendations$") && method.equals("GET")) {
-            result = controller.getUserRecommendations(extractUUID(path), queryParams);
-
         } else {
-            result.put("response", "{\"error\":\"Not Found\"}");
-            result.put("statusCode", 404);
+            result.put("response", "{\"error\":\"No Valid Token\"}");
+            result.put("statusCode", 401);
         }
 
         int statusCode = (int) result.get("statusCode");

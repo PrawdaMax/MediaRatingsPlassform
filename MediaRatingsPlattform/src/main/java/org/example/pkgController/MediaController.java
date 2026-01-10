@@ -1,13 +1,13 @@
 package org.example.pkgController;
 
-import org.example.pkgService.Service;
+import org.example.pkgService.MediaService;
 import java.util.Map;
 import java.util.UUID;
 
 public class MediaController {
-    private final Service service;
+    private final MediaService service;
 
-    public MediaController(Service service) {
+    public MediaController(MediaService service) {
         this.service = service;
     }
 

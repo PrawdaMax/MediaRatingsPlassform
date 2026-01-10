@@ -1,6 +1,8 @@
 package org.example.pkgServer.pkgHandlers;
 
 import com.sun.net.httpserver.HttpExchange;
+import org.example.pkgServer.pkgToken.JWTUtil;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLDecoder;
@@ -8,6 +10,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public abstract class BaseHandler {
+    JWTUtil  jwtUtil = new JWTUtil();
+
     protected void sendResponse(HttpExchange exchange, int statusCode, String response) throws IOException {
         exchange.getResponseHeaders().add("Content-Type", "application/json");
         byte[] bytes = response.getBytes(StandardCharsets.UTF_8);
@@ -36,5 +40,19 @@ public abstract class BaseHandler {
             } catch (IllegalArgumentException ignored) {}
         }
         return null;
+    }
+
+    public Boolean getJWTConfirm(HttpExchange exchange) {
+        String authHeader = exchange.getRequestHeaders().getFirst("Authorization");
+
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+
+            if (!jwtUtil.isTokenExpired(token)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

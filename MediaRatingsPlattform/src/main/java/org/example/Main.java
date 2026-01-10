@@ -1,39 +1,37 @@
 package org.example;
 
-import org.example.pkgDB.Database;
-import org.example.pkgDB.TestDataLoader;
+import org.example.pkgMisc.Config;
 import org.example.pkgServer.Server;
-import org.example.pkgService.Service;
+import org.example.pkgServer.pkgRepositories.MediaRepository;
+import org.example.pkgServer.pkgRepositories.RatingRepository;
+import org.example.pkgServer.pkgRepositories.TokenRepository;
+import org.example.pkgServer.pkgRepositories.UserRepository;
+import org.example.pkgService.LeaderboardService;
+import org.example.pkgService.MediaService;
+import org.example.pkgService.RatingService;
+import org.example.pkgService.UserService;
 
 /*
-Junit Tests (verbessern und neue schreiben)
-Put to Patch
-
-Responses einheitlich
-JSON Ausgabe (Passwörter, keine Status Codes gleich wie response message)
-
-Token benutzung bei erstellung/bearbeitung
-
-logging
-
-mehr Klassen: Validators
-
-Feedback Abgabe allgemein:
-Controller ist context -> Pfad
-controller unterscheidet zwischen methoden und weist zu
-
-Controller getMediaEntry
+docker-compose up --build / down -v
+docker exec -it postgres psql -U admin -d mediaRatingsDB
+\dt
+select
 */
 
 public class Main {
     public static void main(String[] args) {
         try  {
-            Database database = new Database();
-            TestDataLoader loader = new TestDataLoader(database);
-            loader.loadFromJson(TestDataLoader.class.getClassLoader().getResource("TestData.json").getPath());
+            TokenRepository  tokenRepo = new TokenRepository();
+            MediaRepository mediaRepo = new MediaRepository();
+            UserRepository userRepo = new UserRepository();
+            RatingRepository ratingRepo = new RatingRepository();
 
-            Service service = new Service(database);
-            Server server = new Server(8080, service);
+            LeaderboardService leaderboardService = new LeaderboardService(userRepo, ratingRepo);
+            RatingService ratingService = new RatingService(ratingRepo);
+            UserService userService = new UserService(userRepo, tokenRepo, ratingRepo, mediaRepo);
+            MediaService mediaService = new MediaService(mediaRepo, userRepo, ratingRepo);
+            
+            Server server = new Server(Integer.parseInt(Config.get("SERVER_PORT")), userService, mediaService, ratingService, leaderboardService);
             server.start();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());

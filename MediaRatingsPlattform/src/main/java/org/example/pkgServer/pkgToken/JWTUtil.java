@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.example.pkgMisc.Config;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
@@ -14,9 +15,9 @@ import java.util.Map;
 public class JWTUtil {
 
     // Use a consistent, base64-encoded or string-based key (must be at least 256 bits for HS256)
-    private final String SECRET_STRING = "wLxFw4YbcW9Kj8w3Zl49KJzyPj2G6TvAeCNVUQqvA1c=";
+    private final String SECRET_STRING = Config.get("JWT_SECRET");
     private final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(SECRET_STRING.getBytes(StandardCharsets.UTF_8));
-    private final long EXPIRATION_TIME = 86400000; // 24h
+    private final long EXPIRATION_TIME = Long.parseLong(Config.get("JWT_EXPIRATION_MS")); // 24h
 
     public String generateToken(String userId, String username) {
         Map<String, Object> claims = new HashMap<>();

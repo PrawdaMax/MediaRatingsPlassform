@@ -3,7 +3,7 @@ package org.example.pkgServer.pkgHandlers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.example.pkgController.LeaderboardController;
-import org.example.pkgService.Service;
+import org.example.pkgService.LeaderboardService;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import java.util.Map;
 public class LeaderboardHandler extends BaseHandler implements HttpHandler {
     private final LeaderboardController controller;
 
-    public LeaderboardHandler(Service service) {
+    public LeaderboardHandler(LeaderboardService service) {
         this.controller = new LeaderboardController(service);
     }
 
@@ -20,11 +20,27 @@ public class LeaderboardHandler extends BaseHandler implements HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
         Map<String, Object> result = new HashMap<>();
 
-        if (exchange.getRequestMethod().equals("GET") && exchange.getRequestURI().getPath().equals("/api/leaderboard")) {
-            result = controller.getLeaderboard();
+        String path = exchange.getRequestURI().getPath();
+        String method = exchange.getRequestMethod();
+
+        if (getJWTConfirm(exchange)) {
+            switch (path) {
+                case "/api/leaderboard" -> {
+                    if (method.equals("GET")) {
+                        result = controller.getLeaderboard();
+                    } else {
+                        result.put("response", "{\"error\":\"Method Not Allowed\"}");
+                        result.put("statusCode", 405);
+                    }
+                }
+                default -> {
+                    result.put("response", "{\"error\":\"Not Found\"}");
+                    result.put("statusCode", 404);
+                }
+            }
         } else {
-            result.put("response", "{\"error\":\"Not Found\"}");
-            result.put("statusCode", 404);
+            result.put("response", "{\"error\":\"No Valid Token\"}");
+            result.put("statusCode", 401);
         }
 
         int statusCode = (int) result.get("statusCode");

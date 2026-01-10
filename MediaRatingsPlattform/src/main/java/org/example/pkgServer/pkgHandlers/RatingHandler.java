@@ -3,7 +3,7 @@ package org.example.pkgServer.pkgHandlers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.example.pkgController.RatingController;
-import org.example.pkgService.Service;
+import org.example.pkgService.RatingService;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -14,7 +14,7 @@ import java.util.UUID;
 public class RatingHandler extends BaseHandler implements HttpHandler {
     private final RatingController controller;
 
-    public RatingHandler(Service service) {
+    public RatingHandler(RatingService service) {
         this.controller = new RatingController(service);
     }
 
@@ -26,18 +26,23 @@ public class RatingHandler extends BaseHandler implements HttpHandler {
 
         Map<String, Object> result = new HashMap<>();
 
-        if (path.matches("^/api/ratings/[0-9a-fA-F-]+$") && method.equals("PUT")) {
-            result = controller.updateRating(extractUUID(path), body);
+        if (getJWTConfirm(exchange)) {
+            if (path.matches("^/api/ratings/[0-9a-fA-F-]+$") && method.equals("PUT")) {
+                result = controller.updateRating(extractUUID(path), body);
 
-        } else if (path.matches("^/api/ratings/[0-9a-fA-F-]+/like$") && method.equals("POST")) {
-            result = controller.likeRating(extractUUID(path), body);
+            } else if (path.matches("^/api/ratings/[0-9a-fA-F-]+/like$") && method.equals("POST")) {
+                result = controller.likeRating(extractUUID(path), body);
 
-        } else if (path.matches("^/api/ratings/[0-9a-fA-F-]+/confirm$") && method.equals("POST")) {
-            result = controller.confirmRating(extractUUID(path));
+            } else if (path.matches("^/api/ratings/[0-9a-fA-F-]+/confirm$") && method.equals("POST")) {
+                result = controller.confirmRating(extractUUID(path));
 
+            } else {
+                result.put("response", "{\"error\":\"Not Found\"}");
+                result.put("statusCode", 404);
+            }
         } else {
-            result.put("response", "{\"error\":\"Not Found\"}");
-            result.put("statusCode", 404);
+            result.put("response", "{\"error\":\"No Valid Token\"}");
+            result.put("statusCode", 401);
         }
 
         int statusCode = (int) result.get("statusCode");

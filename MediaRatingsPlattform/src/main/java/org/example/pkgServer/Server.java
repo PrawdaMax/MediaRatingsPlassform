@@ -2,8 +2,10 @@ package org.example.pkgServer;
 
 import com.sun.net.httpserver.HttpServer;
 import org.example.pkgServer.pkgHandlers.*;
-import org.example.pkgService.Service;
-import org.example.pkgUI.AppLogger;
+import org.example.pkgService.LeaderboardService;
+import org.example.pkgService.MediaService;
+import org.example.pkgService.RatingService;
+import org.example.pkgService.UserService;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -11,13 +13,19 @@ import java.util.logging.Logger;
 
 public class Server {
     private final int port;
-    private final Service service;
+    private UserService userService;
+    private RatingService ratingService;
+    private MediaService mediaService;
+    private LeaderboardService leaderboardService;
     private HttpServer httpServer;
     //private final Logger log = AppLogger.getLogger(Server.class);
 
-    public Server(int port, Service service) {
+    public Server(int port, UserService userService, MediaService mediaService, RatingService ratingService, LeaderboardService leaderService) {
         this.port = port;
-        this.service = service;
+        this.userService = userService;
+        this.mediaService = mediaService;
+        this.ratingService = ratingService;
+        this.leaderboardService = leaderService;
     }
 
     public void start() throws IOException {
@@ -30,10 +38,11 @@ public class Server {
 
     private void registerContexts(HttpServer server) {
         server.createContext("/", new RootHandler());
-        server.createContext("/api/users", new UserHandler(service));
-        server.createContext("/api/media", new MediaHandler(service));
-        server.createContext("/api/ratings", new RatingHandler(service));
-        server.createContext("/api/leaderboard", new LeaderboardHandler(service));
+        server.createContext("/api/users", new UserHandler(userService));
+        server.createContext("/api/media", new MediaHandler(mediaService));
+        server.createContext("/api/ratings", new RatingHandler(ratingService));
+        server.createContext("/api/leaderboard", new LeaderboardHandler(leaderboardService));
+        server.createContext("/api/auth", new AuthHandler(userService));
     }
 
     private void logStartup() {

@@ -1,0 +1,97 @@
+@startuml
+title Database Schema
+
+' ========================================
+' ENUMS
+' ========================================
+enum media_type {
+  movie
+  series
+  game
+}
+
+' ========================================
+' TABLES
+' ========================================
+
+entity "media" as Media {
+  *id : UUID <<PK>>
+  --
+  title : VARCHAR(255)
+  description : TEXT
+  media_type : media_type
+  year : INT
+  age_restriction : INT
+  created_at : TIMESTAMP
+}
+
+entity "media_genres" as MediaGenres {
+  *media_id : UUID <<FK>>
+  *genre : VARCHAR(100)
+}
+
+entity "users" as Users {
+  *id : UUID <<PK>>
+  --
+  username : VARCHAR(255)
+  password : VARCHAR(255)
+  created_at : TIMESTAMP
+}
+
+entity "user_favorites" as UserFavorites {
+  *user_id : UUID <<FK>>
+  *media_id : UUID <<FK>>
+}
+
+entity "user_favorite_genres" as UserFavoriteGenres {
+  *user_id : UUID <<FK>>
+  *genre : VARCHAR(100)
+}
+
+entity "ratings" as Ratings {
+  *id : UUID <<PK>>
+  --
+  value : INT (1–10)
+  comment : TEXT
+  timestamp : TIMESTAMP
+  confirmed : BOOLEAN
+  user_id : UUID <<FK>>
+  media_id : UUID <<FK>>
+}
+
+entity "likes" as Likes {
+  *id : UUID <<PK>>
+  --
+  user_id : UUID <<FK>>
+  rating_id : UUID <<FK>>
+  created_at : TIMESTAMP
+}
+
+entity "tokens" as Tokens {
+  *token : TEXT <<PK>>
+}
+
+' ========================================
+' RELATIONSHIPS
+' ========================================
+
+' Media–Genres (many-to-many)
+Media ||--o{ MediaGenres : has >
+MediaGenres }o--|| "Genre" : < belongs
+
+' Users–Favorites (many-to-many)
+Users ||--o{ UserFavorites : favorites >
+UserFavorites }o--|| Media
+
+' Users–FavoriteGenres
+Users ||--o{ UserFavoriteGenres : likes >
+
+' Ratings
+Users ||--o{ Ratings : writes >
+Media ||--o{ Ratings : receives >
+
+' Likes
+Users ||--o{ Likes : gives >
+Ratings ||--o{ Likes : gets >
+
+@enduml

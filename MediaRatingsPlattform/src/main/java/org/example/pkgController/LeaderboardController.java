@@ -1,12 +1,12 @@
 package org.example.pkgController;
 
-import org.example.pkgService.Service;
+import org.example.pkgService.LeaderboardService;
 import java.util.Map;
 
 public class LeaderboardController {
-    private final Service service;
+    private final LeaderboardService service;
 
-    public LeaderboardController(Service service) {
+    public LeaderboardController(LeaderboardService service) {
         this.service = service;
     }
 

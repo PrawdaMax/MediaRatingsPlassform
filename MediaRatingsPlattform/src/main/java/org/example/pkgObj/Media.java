@@ -75,10 +75,6 @@ public class Media {
         return genres;
     }
 
-    public void setGenres(List<String> genres) {
-        this.genres = genres;
-    }
-
     public int getAgeRestriction() {
         return ageRestriction;
     }

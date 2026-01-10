@@ -69,23 +69,11 @@ public class Rating {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
-
     public UUID getUserId() {
         return userId;
     }
 
-    public void setUserId(UUID userId) {
-        this.userId = userId;
-    }
-
     public UUID getMediaId() {
         return mediaId;
-    }
-
-    public void setMediaId(UUID mediaId) {
-        this.mediaId = mediaId;
     }
 }

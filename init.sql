@@ -74,5 +74,6 @@ CREATE TABLE likes (
 -- TOKENS TABLE
 -- ========================================
 CREATE TABLE tokens (
-  token TEXT PRIMARY KEY
+  token TEXT,
+  user_id UUID PRIMARY KEY
 );

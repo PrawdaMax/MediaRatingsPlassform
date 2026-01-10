@@ -12,8 +12,8 @@ public record UserWithRatings(User user, List<Rating> ratings) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         return gson.toJson(this);
     }
-    
-    public List<Rating> getRatings() {
-        return ratings;
+
+    public int getRatingsCount() {
+        return ratings.size();
     }
 }
